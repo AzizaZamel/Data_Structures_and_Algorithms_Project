@@ -32,21 +32,29 @@ string minify(const string &filename) {
 	cout << str << "\n"; // Output the original content for debugging or observation
 	string output;  // String to store the minified result
 	bool new_line_come = false; // Boolean flag to track if a newline was encountered
-
+	bool openTag_first_come = false; //Boolean flag to check the first open tag encountered
 	// Loop through the file contents character by character
 	for (unsigned int i = 0; i < str.length(); i++) {
 
 		if (str[i] != '\n') {  // If the character is not a newline
 
-			if (str[i] == ' ' && new_line_come) {
-				// Skip spaces that follow a newline(indentation)to avoid extra space
+			if ((str[i] == ' ' && new_line_come)
+					|| (!openTag_first_come && str[i] == ' ')) {
+				/* Skip spaces that follow a newline(indentation)to avoid extra space
+				 * or skip spaces before the first open tag if found
+				 */
 				continue;
 			} else {
 				output += str[i]; // Otherwise, add the character to the output string
+				if (str[i] == '<' && !openTag_first_come) {
+					//if first "<" found
+					openTag_first_come = true; //set the flag to indicate the first open tag
+
+				}
 			}
 
-			//end of indentation and another char come
-			if (i > 0 && str[i] != ' ' && str[i - 1] == ' ' && new_line_come) {
+			//end of indentation and another char come or there isn't indentation after newline
+			if (str[i] != ' ' && new_line_come) {
 				new_line_come = false; // Reset the flag to indicate no newline after space
 			}
 
@@ -67,6 +75,7 @@ string minify(const string &filename) {
 }
 
 int main(void) {
+	//for testing only
 	string filename = "sample.xml";
 	string minified = minify(filename);
 	std::ifstream inFile("output_file.xml"); // Open the file for reading
