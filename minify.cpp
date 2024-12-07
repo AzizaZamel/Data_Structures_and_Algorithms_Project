@@ -13,7 +13,7 @@
 using namespace std;
 
 // Function to read the contents of a file and return it as a string.
-string filetoss(const string &filename) {
+string convert_file_to_string(const string &filename) {
 	ifstream file(filename); // Open the file
 	if (!file.is_open()) {   // Check if the file is successfully opened
 		fprintf(stderr, "can't open file"); // Print error if file can't be opened
@@ -24,10 +24,22 @@ string filetoss(const string &filename) {
 	file.close();  // Close the file after reading
 	return buffer.str();  // Return the contents of the file as a string
 }
+void write_string_into_file(const string &output_filename, string output) {
+
+	ofstream outFile(output_filename); // Open the output file to write the minified content
+
+	// Check if the output file is open
+	if (outFile.is_open()) {
+		// Write the minified content to the output file
+		outFile << output;
+	} else {
+		fprintf(stderr, "can't open file"); // Print error if file can't be opened
+	}
+}
 
 // Function to minify the content of the file by removing excess whitespace
-string minify(const string &filename) {
-	string str = filetoss(filename);  // Get the file content as a string
+string minify(const string &input_filename, const string &output_filename) {
+	string str =convert_file_to_string(input_filename);  // Get the file content as a string
 
 	cout << str << "\n"; // Output the original content for debugging or observation
 	string output;  // String to store the minified result
@@ -48,7 +60,7 @@ string minify(const string &filename) {
 				output += str[i]; // Otherwise, add the character to the output string
 				if (str[i] == '<' && !openTag_first_come) {
 					//if first "<" found
-					openTag_first_come = true; //set the flag to indicate the first open tag
+					openTag_first_come = 1; //set the flag to indicate the first open tag
 
 				}
 			}
@@ -63,21 +75,14 @@ string minify(const string &filename) {
 		}
 	}
 
-	ofstream outFile("output_file.xml"); // Open the output file to write the minified content
-
-	// Check if the output file is open
-	if (outFile.is_open()) {
-		// Write the minified content to the output file
-		outFile << output;
-	}
+	write_string_into_file(output_filename, output);
 
 	return output;  // Return the minified content as a string
 }
-
 int main(void) {
 	//for testing only
 	string filename = "sample.xml";
-	string minified = minify(filename);
+	string minified = minify(filename, "output_file.xml");
 	std::ifstream inFile("output_file.xml"); // Open the file for reading
 	ofstream outFile2("output_file.txt");
 
@@ -110,4 +115,5 @@ int main(void) {
 	return 0;
 
 }
+
 
