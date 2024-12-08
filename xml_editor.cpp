@@ -5,40 +5,100 @@
 #include <map>
 #include <vector>
 #include <queue>
+#include <stack>
 using namespace std;
 
-string child(string in, string parent, string tab, map<string, int> myMap, vector<string> vec) {
-    string cur = vec[1];
-    vector<string> v(vec.begin() + 1, vec.end());
-    int count;
-    if (cur[0] == '<') {    //If word is a tag
-        auto it = myMap.find(cur.substr(1, cur.size() - 2));
-        int value = it->second;     //get current word freq
-        if (value == 1) {
-            in = in + "\"" + cur.substr(1, cur.size() - 2) + "\": {\n" + tab;
-            in = in + child(in, cur, tab, myMap, v);
-        }
-        else {
-            in = in + "\"" + cur.substr(1, cur.size() - 2) + "\": [\n" + tab + "{\n";
-            tab = tab + "\t";
-            in = in + tab;
-            for (int i = 0; i < value; i++) {
-                auto index = find(v.begin(), v.end(), cur);
-                string huh = *index;
-                while (huh.substr(1, cur.size() - 2) != "\"" + cur) {
-
-                }
-            }
-        }
+//************************************************************
+//helper functions
+bool is_start(string s) {
+    if (s[0] == '<' && s[1] != '/') {
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
+bool is_end(string s) {
+    if (s[0] == '<' && s[1] == '/') {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+string start_string(string s) {
+    return s.substr(1, s.size() - 2);
+}
+
+string end_string(string s) {
+    return s.substr(2, s.size() - 3);
+}
+
+int child_count(vector<string>v, int a, int b ,string g) {
+    string s = start_string(g);
+    int count = 0;
+    for (int i = a;i < b;i++) {
+        if (start_string(v[i]) == s) {
+            count++;
+        }
+    }
+    return count;
+}
+
+bool is_arr(vector<string>v, int a, int b, string g) {
+    for (int i = 1;i < v.size();i++) {
+        if (is_start(v[i]) && is_end(v[i - 1])) {
+            if (end_string(v[i - 1]) == start_string(v[i]) && v[i] == g) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+//************************************************************
+
+/*string child(string parent, string tab, vector<string> vec, int a, int b) {
+    map<string, int> m;
+    bool flag_leaf = true;
+    string s;
+
+    if (is_start(vec[a])) {
+        for (int i = a;i < b;i++) {
+            if (start_string(vec[i])== start_string(vec[a])) {
+                m[vec[a]]++;        //counter up in map
+            }
+        }
+    }
+    else {
+        return vec[a];
+    }
+
+    auto it = m.find(vec[a]);
+    int value = it->second;     //get child freq
+
+    if (value == 1) {       //not array
+        return "\"" + vec[a] + "\": {\n" + tab + child(vec[a], tab, vec, a+1, b);
+    }
+    else {      //array - assuming all array elements are after each other
+        for (int i = a;i < b;i++) {
+            if (start_string(vec[i]) != start_string(vec[a])) {
+                cerr << "here";
+                s = s + child(vec[0], tab, vec, a + 1, b - 1);
+            }
+            else {
+                return s;
+            }
+        }
+    }
+}*/
+
 void convertXmlToJson(const string& inputFile, const string& outputFile) {
     vector<string> v;
-    map<string, int> wordCount;     //get each tag frequency
+    stack<string> s;
     string parent;
     string tab = "\t\t\t";
-    queue<string> out;
 
     //open xml file
     ifstream xmlFile(inputFile);
@@ -61,65 +121,84 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
     xmlFile.close();
     xmlString.erase(remove(xmlString.begin(), xmlString.end(), '\n'), xmlString.cend());
 
+    //cout << xmlString.length() << endl;
     //******************************************************************//
     //Get each tag frequency and divide words and put it in vector ;-;
 
     for (int i = 0; i < xmlString.size(); i++) {
-        int word_size = 0;    //reset word size
-        cerr << "i = " << i << endl;
-        if (xmlString[i++] == '<') {
-            
-            //skip first part
-            if (xmlString[i++] == '?') {
-                while (xmlString[i++] != '>');
-                i--;  // to remove excess i from xmlString[i++]
-                continue;
+        int word_size = 0;
+        if (xmlString[i] == '<') {
+            word_size++;
+            while (xmlString[i] != '>') {
+                i++;
+                word_size++;
             }
-
-            while (xmlString[i++] != '>') word_size++;
-            i--;
-            cerr << xmlString.substr(i - word_size - 1, word_size + 1);
-            if (xmlString[i - word_size - 1] != '/') {
-                wordCount[xmlString.substr(i - word_size - 1, word_size + 1)]++;    //add tag to map or increase count to exsiting word
-                v.push_back(xmlString.substr(i - word_size - 2, word_size + 3));    //adds tag with "<>" to vector
-            }
-            else {
-                v.push_back(xmlString.substr(i - word_size - 2, word_size + 3));    //adds end tag to vector
-            }
+            v.push_back(xmlString.substr(i - word_size + 1, word_size)); // Exclude '<' and '>'
         }
         else if (xmlString[i] == ' ') continue;
         else {
-            cerr << "heo ";
-            i++;
-            while (xmlString[i++] != '<' && i < xmlString.size()) word_size++;
-            i = i - 2;
-            v.push_back(xmlString.substr(i - word_size - 1, word_size + 2));
+            int start = i;
+            while (i < xmlString.size() && xmlString[i] != '<') {
+                i++;
+            }
+            v.push_back(xmlString.substr(start, i - start));
+            i--;  // Adjust i to stay on the correct position (before '<' for next iteration)
         }
     }
     //******************************************************************//
 
+    for (int i = 0; i < v.size();i++) {
+        cerr << v[i] << ",";
+    }
+
     //start function from here
     //initial step
-    parent = v[0].substr(1, v[0].size() - 2);
+    parent = start_string(v[0]);
     jsonFile << "{\n\t" << "\"" << parent << "\": {\n\t\t";
-    string output;
-    jsonFile << child(output, parent, tab, wordCount, v);
+    int size = v.size();
+    for (int i = 1; i < size; i++) {
+        if (is_start(v[i])) {
 
-    for (const auto& pair : wordCount) {
-        jsonFile << pair.first << ": " << pair.second << endl;
+            s.push(v[i]);
+            jsonFile << "\"" + start_string(v[i]) + "\"";
+            bool flag = is_arr(v, i, size, v[i]);
+            //bool flag = false;
+
+            if (!flag) {
+                jsonFile << ": {\n\t\t\n";
+            }
+            else {
+                jsonFile << ": [\n\t\t{\t\t\t\n";
+            }
+
+        }
+        else if (is_end(v[i])) {
+
+            string end = s.top();
+            int eCount = child_count(v, i, size, v[i]);
+            if (eCount == 1) {
+                jsonFile << "}\n\t\t";
+            }
+            else {
+                jsonFile << "]\n\t\t}\t\t\t";
+            }
+
+        }
+        else {
+            jsonFile << "\"" + v[i] + "\"";
+            //cerr << v[i] << endl;
+        }
     }
-    for (int i = 0; i < v.size(); i++) {
-        jsonFile << v[i] << ",";
-    }
+
+    //jsonFile << child(parent, tab, v, 1, v.size()-2);
     jsonFile << endl;
-    jsonFile << xmlString;
-    cout << "Conversion from XML to JSON completed!" << endl;
+    cerr << "Conversion from XML to JSON completed!" << endl;
 }
 
 
 int main(int argc, char* argv[]) {
-    if (argc < 5) {
-        cerr << "usage: xml_editor json -i input_file.xml -o output_file.json" << endl;
+    /*if (argc < 5) {
+        cerr << "usage: xml_editor json -i sample.xml -o output.json" << endl;
         return 1;
     }
 
@@ -127,11 +206,14 @@ int main(int argc, char* argv[]) {
     if (mode != "json") {
         cerr << "Invalid mode. Only 'json' is supported." << endl;
         return 1;
-    }
-    cerr << "json mode, yay!";
+    }*/
+    cerr << "json mode, yay!" << endl;
     // Parse the input file and output file from command-line arguments
-    string inputFile = argv[3];
-    string outputFile = argv[5];
+    //string inputFile = argv[3];
+    //string outputFile = argv[5];
+
+    string inputFile = "C:/Users/Acer/Desktop/Hana/xml_editor/x64/Debug/sample.xml";
+    string outputFile = "output.json";
 
     // Call the function to convert XML to JSON
     convertXmlToJson(inputFile, outputFile);
