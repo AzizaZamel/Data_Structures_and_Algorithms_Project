@@ -6,6 +6,7 @@
 #include <vector>
 #include <queue>
 #include <stack>
+#include <unordered_map>
 using namespace std;
 
 //************************************************************
@@ -28,6 +29,15 @@ bool is_end(string s) {
     }
 }
 
+bool is_string(string s) {
+    for (int i = 1;i < s.size();i++) {
+        if (s[0] == '<' && s[i] == '>') {
+            return false;
+        }
+    }
+    return true;
+}
+
 string start_string(string s) {
     return s.substr(1, s.size() - 2);
 }
@@ -36,69 +46,34 @@ string end_string(string s) {
     return s.substr(2, s.size() - 3);
 }
 
-int child_count(vector<string>v, int a, int b ,string g) {
-    string s = start_string(g);
-    int count = 0;
-    for (int i = a;i < b;i++) {
-        if (start_string(v[i]) == s) {
-            count++;
-        }
-    }
-    return count;
-}
-
 bool is_arr(vector<string>v, int a, int b, string g) {
-    for (int i = 1;i < v.size();i++) {
+    for (int i = a;i < v.size();i++) {
         if (is_start(v[i]) && is_end(v[i - 1])) {
-            if (end_string(v[i - 1]) == start_string(v[i]) && v[i] == g) {
+            if ((end_string(v[i - 1]) == start_string(v[i])) && v[i] == g) {
                 return true;
             }
         }
     }
     return false;
 }
-//************************************************************
 
-/*string child(string parent, string tab, vector<string> vec, int a, int b) {
-    map<string, int> m;
-    bool flag_leaf = true;
-    string s;
-
-    if (is_start(vec[a])) {
-        for (int i = a;i < b;i++) {
-            if (start_string(vec[i])== start_string(vec[a])) {
-                m[vec[a]]++;        //counter up in map
-            }
-        }
+void trimTrailingWhitespace(string& str) {
+    size_t end = str.find_last_not_of(" \t\n\r\f\v");
+    if (end != string::npos) {
+        str.erase(end + 1);
     }
     else {
-        return vec[a];
+        str.clear();
     }
-
-    auto it = m.find(vec[a]);
-    int value = it->second;     //get child freq
-
-    if (value == 1) {       //not array
-        return "\"" + vec[a] + "\": {\n" + tab + child(vec[a], tab, vec, a+1, b);
-    }
-    else {      //array - assuming all array elements are after each other
-        for (int i = a;i < b;i++) {
-            if (start_string(vec[i]) != start_string(vec[a])) {
-                cerr << "here";
-                s = s + child(vec[0], tab, vec, a + 1, b - 1);
-            }
-            else {
-                return s;
-            }
-        }
-    }
-}*/
+}
+//************************************************************
 
 void convertXmlToJson(const string& inputFile, const string& outputFile) {
     vector<string> v;
-    stack<string> s;
-    string parent;
-    string tab = "\t\t\t";
+    stack<string> bracket;
+    //string parent;
+    string tab = "\t";
+    string b;
 
     //open xml file
     ifstream xmlFile(inputFile);
@@ -120,6 +95,7 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
     string xmlString = buffer.str();
     xmlFile.close();
     xmlString.erase(remove(xmlString.begin(), xmlString.end(), '\n'), xmlString.cend());
+    xmlString.erase(remove(xmlString.begin(), xmlString.end(), '\t'), xmlString.cend());
 
     //cout << xmlString.length() << endl;
     //******************************************************************//
@@ -137,67 +113,144 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
         }
         else if (xmlString[i] == ' ') continue;
         else {
-            int start = i;
-            while (i < xmlString.size() && xmlString[i] != '<') {
-                i++;
-            }
-            v.push_back(xmlString.substr(start, i - start));
-            i--;  // Adjust i to stay on the correct position (before '<' for next iteration)
+        int start = i;
+        while (i < xmlString.size() && xmlString[i] != '<') {
+            i++;
+        }
+        v.push_back(xmlString.substr(start, i - start));
+        i--;  // Adjust i to stay on the correct position (before '<' for next iteration)
         }
     }
     //******************************************************************//
 
     for (int i = 0; i < v.size();i++) {
-        cerr << v[i] << ",";
+        trimTrailingWhitespace(v[i]);
     }
 
     //start function from here
     //initial step
-    parent = start_string(v[0]);
-    jsonFile << "{\n\t" << "\"" << parent << "\": {\n\t\t";
+    //parent = start_string(v[0]);
+    jsonFile << "{\n" + tab + "\"" + start_string(v[0]) + "\": ";
     int size = v.size();
-    for (int i = 1; i < size; i++) {
+    bracket.push("{");
+    for (int i = 1; i < size - 1; i++) {
         if (is_start(v[i])) {
+            bool prev_start_flag = is_start(v[i - 1]);      // 1 = start, 0 = end
+            bool flag = is_arr(v, i, size, v[i - 1]);   // 1 = array, 0 = not an array
+            bool already_exists = false;                      // did i already put this array tag or not
+            if (i > 2 && is_start(v[i - 1]) && is_end(v[i - 2])) {
+                if (start_string(v[i - 1]) == end_string(v[i - 2])) already_exists = true;
+            }
 
-            s.push(v[i]);
-            jsonFile << "\"" + start_string(v[i]) + "\"";
-            bool flag = is_arr(v, i, size, v[i]);
-            //bool flag = false;
+            //start by checking if an array then checking if the previous is a start tag
+            if (flag && !already_exists) {
+                jsonFile << "[\n";
+                bracket.push("[");
+                tab += "\t";
+            }
 
-            if (!flag) {
-                jsonFile << ": {\n\t\t\n";
+            if (prev_start_flag) {
+                if (!bracket.empty() && bracket.top() == "[") {
+                    jsonFile << tab + "{\n";
+                }
+                else {
+                    jsonFile << "{\n";
+                }
+                tab += "\t";
+                bracket.push("{");
+                jsonFile << tab + "\"" + start_string(v[i]) + "\": ";
+            }
+            else if (end_string(v[i - 1]) != start_string(v[i])) {  //else must be end tag, if it's a string then the xml file is corrupt
+                jsonFile << ",\n";
+                jsonFile << tab + "\"" + start_string(v[i]) + "\": ";
             }
             else {
-                jsonFile << ": [\n\t\t{\t\t\t\n";
+                jsonFile << ",\n";
             }
 
         }
         else if (is_end(v[i])) {
 
-            string end = s.top();
-            int eCount = child_count(v, i, size, v[i]);
-            if (eCount == 1) {
-                jsonFile << "}\n\t\t";
+            if (!bracket.empty()) b = bracket.top();
+
+            if ((start_string(v[i + 1]) == end_string(v[i])) && is_string(v[i-1]) && b == "[") {
+
+            }
+            else if (is_start(v[i + 1]) && (start_string(v[i + 1]) != end_string(v[i])) && is_string(v[i - 1])) {
+
+            }
+            else if ( is_string(v[i - 1]) && b != "[") {
+
             }
             else {
-                jsonFile << "]\n\t\t}\t\t\t";
-            }
+                if (!bracket.empty()) b = bracket.top();
+                if (b == "[") {
+                    if (!tab.empty()) tab.pop_back();
+                    jsonFile << endl << tab + "]";
 
+                }
+                else if (b == "{") {
+                    if (!tab.empty()) tab.pop_back();
+                    jsonFile << endl << tab + "}";
+                }
+                if (!bracket.empty()) bracket.pop();
+                if (!bracket.empty()) b = bracket.top();
+                if (is_end(v[i + 1]) && b == "[") {
+                    if (b == "[") {
+                        if (!tab.empty()) tab.pop_back();
+                        jsonFile << endl << tab + "]";
+
+                    }
+                    else if (b == "{") {
+                        if (!tab.empty()) tab.pop_back();
+                        jsonFile << endl << tab + "}";
+                    }
+                    if (!bracket.empty()) bracket.pop();
+                }
+            }
         }
         else {
-            jsonFile << "\"" + v[i] + "\"";
-            //cerr << v[i] << endl;
+            bool already_exists = false;
+            if (start_string(v[i-1]) == end_string(v[i - 2])) already_exists = true;
+            bool flag = is_arr(v, i, size, v[i - 1]);   // 1 = array, 0 = not an array
+            if (flag && !already_exists) {
+                jsonFile << "[\n";
+                bracket.push("[");
+                tab += "\t";
+            }
+
+            if (!bracket.empty() && bracket.top() == "[") {
+                jsonFile << tab + "\"" + v[i] + "\"";
+            }
+            else {
+                jsonFile << "\"" + v[i] + "\"";
+            }
+            
         }
     }
 
-    //jsonFile << child(parent, tab, v, 1, v.size()-2);
+    while (!bracket.empty()) {
+        b = bracket.top();
+        if (b == "[") {
+            if (!tab.empty()) tab.pop_back();
+            jsonFile << "\n" + tab + "]";
+            
+        }
+        else if (b == "{") {
+            if (!tab.empty()) tab.pop_back();
+            jsonFile << "\n" + tab + "}";
+            
+        }
+        bracket.pop();
+    }
+
     jsonFile << endl;
     cerr << "Conversion from XML to JSON completed!" << endl;
 }
 
 
 int main(int argc, char* argv[]) {
-    /*if (argc < 5) {
+    if (argc < 5) {
         cerr << "usage: xml_editor json -i sample.xml -o output.json" << endl;
         return 1;
     }
@@ -206,14 +259,14 @@ int main(int argc, char* argv[]) {
     if (mode != "json") {
         cerr << "Invalid mode. Only 'json' is supported." << endl;
         return 1;
-    }*/
+    }
     cerr << "json mode, yay!" << endl;
     // Parse the input file and output file from command-line arguments
-    //string inputFile = argv[3];
-    //string outputFile = argv[5];
+    string inputFile = argv[3];
+    string outputFile = argv[5];
 
-    string inputFile = "C:/Users/Acer/Desktop/Hana/xml_editor/x64/Debug/sample.xml";
-    string outputFile = "output.json";
+    //string inputFile = "C:/Users/Acer/Desktop/Hana/xml_editor/x64/Debug/simple.xml";
+    //string outputFile = "outputs_2.json";
 
     // Call the function to convert XML to JSON
     convertXmlToJson(inputFile, outputFile);
