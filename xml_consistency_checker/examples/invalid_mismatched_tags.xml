@@ -1,0 +1,11 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<catalog>
+    <product>
+        <name>Smartphone</name>
+        <price>699.99</price>
+    </product>
+    <product>
+        <name>Laptop</name>
+        <price>1299.99</price>
+    </prodcut> <!-- Mismatched closing tag: </prodcut> instead of </product> -->
+</catalog>

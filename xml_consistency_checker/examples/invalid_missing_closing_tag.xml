@@ -1,0 +1,15 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<library>
+    <book>
+        <title>Effective C++</title>
+        <author>Scott Meyers</author>
+    </book>
+    <book>
+        <title>Clean Code</title>
+        <author>Robert C. Martin</author>
+    <!-- Missing closing tag for <book> -->
+    <book>
+        <title>Design Patterns</title>
+        <author>Erich Gamma, et al.</author>
+    </book>
+</library>
