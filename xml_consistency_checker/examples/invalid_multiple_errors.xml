@@ -1,0 +1,41 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<library>
+    <book>
+        <title>Effective C++</title>
+        <author>Scott Meyers</author>
+    </book>
+    <book>
+        <title>Clean Code</title>
+        <author>Robert C. Martin</author>
+    <!-- Missing closing tag for <book> -->
+    <book>
+        <title>Design Patterns</title>
+        <author>Erich Gamma, et al.</author>
+    <!-- Missing closing tag for <book> -->
+    </book>
+    <magazine>
+        <title>Time</title>
+        <issue>April 2024</issue>
+    </magazine>
+    </journal> <!-- Unexpected closing tag: </journal> with no corresponding opening tag -->
+    <newspaper>
+        <title>The New York Times</title>
+        <date>2024-04-01</date>
+    <!-- Missing closing tag for <newspaper> -->
+    <article>
+        <headline>Breaking News</headline>
+        <content>Some important news content.</content>
+    </articel> <!-- Mismatched closing tag: </articel> instead of </article> -->
+    <editorial>
+        <title>Opinion</title>
+        <writer>John Doe</writer>
+    </editorial>
+    <review>
+        <title>Book Review</title>
+        <reviewer>Jane Smith</reviewer>
+    <!-- Missing closing tag for <review> -->
+    <summary>
+        <note>Summary of publications</note>
+    </summary>
+    </publication> <!-- Unexpected closing tag: </publication> with no corresponding opening tag -->
+</library>

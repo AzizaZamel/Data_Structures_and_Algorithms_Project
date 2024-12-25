@@ -1,0 +1,17 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<html>
+    <head>
+        <title>Sample Page</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <div>
+            <p>This is a paragraph.</p>
+            <p>This is another paragraph.</p>
+            <img src="image.png" alt="Sample Image"/>
+        </div>
+        <footer>
+            <span>Footer Content</span>
+        </footer>
+    </body>
+</html>
