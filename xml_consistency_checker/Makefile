@@ -30,7 +30,10 @@ TEST_TARGET = $(BINDIR)/test_xml_checker
 # Source and Object Files
 # ===========================
 SRC = $(wildcard $(SRCDIR)/*.cpp)
+# Exclude main.cpp from SRC for test builds
+SRC_NO_MAIN = $(filter-out $(SRCDIR)/main.cpp, $(SRC))
 OBJ = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRC))
+OBJ_NO_MAIN = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRC_NO_MAIN))
 
 # Test Source and Object Files
 TEST_SRC = $(wildcard $(TESTDIR)/*.cpp)
@@ -83,7 +86,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 # ===========================
 static: $(STATIC_LIB)
 
-$(STATIC_LIB): $(OBJ)
+$(STATIC_LIB): $(OBJ_NO_MAIN)
 	@mkdir -p $(LIBDIR)
 	ar rcs $@ $^
 	@echo "Built static library: $@"
@@ -93,7 +96,7 @@ $(STATIC_LIB): $(OBJ)
 # ===========================
 dynamic: $(DYNAMIC_LIB)
 
-$(DYNAMIC_LIB): $(OBJ)
+$(DYNAMIC_LIB): $(OBJ_NO_MAIN)
 	@mkdir -p $(LIBDIR)
 	$(CC) -shared -fPIC $(CFLAGS) $(BUILD_FLAGS) -o $@ $^
 	@echo "Built dynamic library: $@"
@@ -111,7 +114,7 @@ $(OBJDIR)/%.o: $(TESTDIR)/%.cpp
 # ===========================
 test: $(TEST_TARGET)
 
-$(TEST_TARGET): $(OBJ) $(TEST_OBJ)
+$(TEST_TARGET): $(OBJ_NO_MAIN) $(TEST_OBJ)
 	@mkdir -p $(BINDIR)
 	$(CC) $(CFLAGS) $(BUILD_FLAGS) $^ -o $@
 	@echo "Built test executable: $@"
