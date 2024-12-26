@@ -1,0 +1,16 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<menu>
+    <item>
+        <name>Home</name>
+        <link>/home</link>
+    </item>
+    <item>
+        <name>About</name>
+        <link>/about</link>
+    </item>
+    </item> <!-- Unexpected closing tag: </item> with no corresponding opening tag -->
+    <item>
+        <name>Contact</name>
+        <link>/contact</link>
+    </item>
+</menu>
