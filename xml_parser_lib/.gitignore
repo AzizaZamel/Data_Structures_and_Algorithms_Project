@@ -1,0 +1,144 @@
+# =============================
+# C++ Project .gitignore
+# =============================
+
+# -----------------------------
+# Compiled Object Files
+# -----------------------------
+*.o
+*.obj
+*.lo
+*.la
+*.al
+*.libs
+
+# -----------------------------
+# Compiled Dynamic Libraries
+# -----------------------------
+*.so
+*.dll
+*.dylib
+
+# -----------------------------
+# Compiled Static Libraries
+# -----------------------------
+*.a
+*.lib
+
+# -----------------------------
+# Executables
+# -----------------------------
+# Binary executables
+/bin/
+/bin/*
+!bin/*.exe
+
+# Specific executable extensions
+*.exe
+*.out
+*.app
+
+# -----------------------------
+# Makefile Generated Files
+# -----------------------------
+# Build directories
+/build/
+/build/*
+/lib/
+/lib/*
+/bin/
+/bin/*
+
+# Temporary build files
+*.d
+*.dep
+
+# -----------------------------
+# Debug Files
+# -----------------------------
+# macOS debug files
+*.dSYM/
+
+# Windows debug files
+*.pdb
+
+# -----------------------------
+# IDE and Editor Configurations
+# -----------------------------
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# CLion
+.idea/
+*.iml
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln
+*.vcxproj*
+*.vcxproj.filters
+
+# Eclipse
+.project
+.cproject
+.settings/
+
+# Xcode
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Qt Creator
+*.pro.user
+*.qbs.user
+
+# -----------------------------
+# Other Temporary Files
+# -----------------------------
+# Backup files
+*~
+*.bak
+*.tmp
+*.temp
+
+# Swap files
+*.swp
+*.swo
+
+# Log files
+*.log
+
+# -----------------------------
+# Miscellaneous
+# -----------------------------
+# Archive files
+*.zip
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tbz
+
+# Node modules (if any)
+node_modules/
+
+# Python bytecode (if any scripts are used)
+__pycache__/
+*.py[cod]

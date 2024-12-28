@@ -1,0 +1,51 @@
+<!-- File: tests/network_analysis.xml -->
+
+<network>
+    <user id="1" name="Sarah">
+        <followers>
+            <follower id="2" />
+            <follower id="3" />
+            <follower id="4" />
+        </followers>
+        <following>
+            <following id="2" />
+            <following id="5" />
+        </following>
+    </user>
+    <user id="2" name="Doaa">
+        <followers>
+            <follower id="1" />
+            <follower id="3" />
+        </followers>
+        <following>
+            <following id="1" />
+            <following id="3" />
+            <following id="4" />
+        </following>
+    </user>
+    <user id="3" name="Rodaina">
+        <followers>
+            <follower id="1" />
+        </followers>
+        <following>
+            <following id="2" />
+        </following>
+    </user>
+    <user id="4" name="Aziza">
+        <followers>
+            <follower id="2" />
+        </followers>
+        <following>
+            <following id="1" />
+            <following id="2" />
+        </following>
+    </user>
+    <user id="5" name="Toqa">
+        <followers>
+            <follower id="1" />
+        </followers>
+        <following>
+            <following id="1" />
+        </following>
+    </user>
+</network>
