@@ -2,7 +2,7 @@
 # Compiler and Flags
 # ===========================
 CC = g++
-CFLAGS = -Iinclude -Wall -Wextra -std=c++11
+CFLAGS = -Iinclude -Wall -Wextra -std=c++17
 
 # Debug and Release Flags
 DEBUG_FLAGS = -g -DDEBUG
