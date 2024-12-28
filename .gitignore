@@ -1,0 +1,30 @@
+# Compiled binaries
+/bin/
+/output/*.xml
+
+# Object files and other build artifacts
+*.o
+*.out
+*.obj
+
+# Editor/IDE specific files
+*.vscode/
+*.idea/
+*.swp
+*.swo
+*.swn
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.exe
+*.dll
+
+# Unit test results
+/tests/*.xml
+/tests/*.log
