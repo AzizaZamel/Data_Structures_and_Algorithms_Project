@@ -5,7 +5,7 @@ SETLOCAL EnableDelayedExpansion
 :: Compiler and Flags
 :: ===========================
 set CC=g++
-set CFLAGS=-Iinclude -Wall -Wextra -std=c++11
+set CFLAGS=-Iinclude -Wall -Wextra -std=c++17
 
 :: Debug and Release Flags
 set DEBUG_FLAGS=-g -DDEBUG
