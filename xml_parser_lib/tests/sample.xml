@@ -1,0 +1,27 @@
+<!-- File: tests/sample.xml -->
+
+<library>
+    <book id="1" title="The C++ Programming Language">
+        <author>Bjarne Stroustrup</author>
+        <year>2013</year>
+        <genres>
+            <genre>Programming</genre>
+            <genre>Software Engineering</genre>
+        </genres>
+    </book>
+    <book id="2" title="Effective Modern C++">
+        <author>Scott Meyers</author>
+        <year>2014</year>
+        <genres>
+            <genre>Programming</genre>
+        </genres>
+    </book>
+    <book id="3" title="Clean Code">
+        <author>Robert C. Martin</author>
+        <year>2008</year>
+        <genres>
+            <genre>Programming</genre>
+            <genre>Software Engineering</genre>
+        </genres>
+    </book>
+</library>
