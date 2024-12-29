@@ -2,7 +2,7 @@
  * Minifing.h
  *
  *  Created on: Dec 28, 2024
- *      Author: Fatma
+ *      Author: Doaa
  */
 
 #ifndef MINIFING_H_
