@@ -35,3 +35,4 @@ namespace xml_parser_lib
 } // namespace xml_parser_lib
 
 #endif // XML_PARSER_H
+
