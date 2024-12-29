@@ -6,7 +6,7 @@
 #include <QString>
 #include <QVector>
 
-// Include your search logic header
+
 #include "word_topic_search.h"
 
 QT_BEGIN_NAMESPACE
