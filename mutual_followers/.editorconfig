@@ -1,0 +1,33 @@
+# .editorconfig
+# EditorConfig helps maintain consistent coding styles for multiple developers
+# working on the same project across various editors and IDEs.
+
+# top-most EditorConfig file
+root = true
+
+# Default settings (applies to all files if not overridden below)
+[*]
+charset = utf-8
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# For C, C++ source, and header files
+[*.{cpp,c,h,hpp}]
+indent_style = space
+indent_size = 4
+
+# For Makefiles (commonly use tabs for indentation)
+[Makefile]
+indent_style = tab
+
+# Optionally, if you have other file types:
+# Example: For Markdown, you might want different rules
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Example: For JSON (2-space indent)
+[*.json]
+indent_style = space
+indent_size = 2
