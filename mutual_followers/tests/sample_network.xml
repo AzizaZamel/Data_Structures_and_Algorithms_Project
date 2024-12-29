@@ -19,7 +19,7 @@
         </followers>
     </user>
 
-    <!-- Sara (id=3) -->
+    <!-- Sarah (id=3) -->
     <user id="3" name="Sarah">
         <followers>
             <follower id="1" />
