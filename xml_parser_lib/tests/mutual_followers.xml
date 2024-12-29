@@ -1,0 +1,57 @@
+<!-- File: network_arabic_english.xml -->
+
+<network>
+    <!-- Huda (id=1) -->
+    <user id="1" name="Huda">
+        <followers>
+            <!-- Aya (2), Malak (3) follow Huda (1) -->
+            <follower id="2" />
+            <follower id="3" />
+        </followers>
+    </user>
+
+    <!-- Aya (id=2) -->
+    <user id="2" name="Aya">
+        <followers>
+            <!-- Malak (3), Reem (5) follow Aya (2) -->
+            <follower id="3" />
+            <follower id="5" />
+        </followers>
+    </user>
+
+    <!-- Malak (id=3) -->
+    <user id="3" name="Malak">
+        <followers>
+            <!-- Huda (1), Fatima (4) follow Malak (3) -->
+            <follower id="1" />
+            <follower id="4" />
+        </followers>
+    </user>
+
+    <!-- Fatima (id=4) -->
+    <user id="4" name="Fatima">
+        <followers>
+            <!-- Aya (2) follows Fatima (4) -->
+            <follower id="2" />
+        </followers>
+    </user>
+
+    <!-- Reem (id=5) -->
+    <user id="5" name="Reem">
+        <followers>
+            <!-- Malak (3), Fatima (4), Rana (6) follow Reem (5) -->
+            <follower id="3" />
+            <follower id="4" />
+            <follower id="6" />
+        </followers>
+    </user>
+
+    <!-- Rana (id=6) -->
+    <user id="6" name="Rana">
+        <followers>
+            <!-- Huda (1) and Reem (5) follow Rana (6) -->
+            <follower id="1" />
+            <follower id="5" />
+        </followers>
+    </user>
+</network>
