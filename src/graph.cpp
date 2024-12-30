@@ -6,12 +6,13 @@
 #include <list>
 #include <unordered_map>
 #include <sstream>
-#include "prettify.hpp"
-
+#include "xml_helper.h"
 #include "graph.hpp"
-//using namespace std;
 
 
+void Graph::setUsers(unordered_map<int, string> u) {
+    users = u;
+}
 
 // Add an edge from startVertex to endVertex
 void Graph::addEdge(int startVertex, int endVertex) {
@@ -28,15 +29,27 @@ unordered_map<int, list<int>> Graph::getMap() {
     return m;
 }
 
+// return the users
+unordered_map<int, string> Graph::getUsers() {
+    return users;
+}
+
 // Display the graph (for debugging purposes)
 void Graph::printGraph() {
 	for (const auto& pair : m) {
-		std::cout << pair.first << ": ";
+		cout << pair.first << ": ";
 		for (const auto& vertex : pair.second) {
-			std::cout << vertex << " ";
+			cout << vertex << " ";
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
+}
+
+// Display users nams and ids (for debugging purposes)
+void Graph::printUsers() {
+    for (const auto& pair : users) {
+        cout << pair.first << " : " << pair.second << endl;
+    }
 }
 
 // Generate a DOT file from the graph
@@ -80,72 +93,70 @@ string Graph::generateDotFile() {
 	// Return the name of the generated DOT file
 	return "graph.dot";
 }
-
-
-
-// Function to generate a graph from an XML file.
+///
 Graph* generateGraph(const string& filename) {
-    // Read the entire XML file into a string.
-    string content = fileToString(filename);
-
-    // Define delimiters to replace with spaces for easier parsing.
-    string dels = "<>=\"\n";
-    for (char del : dels) {
-        replace(content.begin(), content.end(), del, ' '); // Replace each delimiter with space
-    }
-    // Use a stringstream to tokenize the cleaned content.
-    stringstream buffer(content);
-    string token;
-    int id,f_id;   // Variables to store user ID and follower ID.
-    bool user_flag = false, follower_flag = false ,name_posts_flag = false;   // Flags to track parsing states.
-
-    // Create a new graph instance.
+    vector<string> vec = parser(filename);
     Graph* g = new Graph();
+    unordered_map<int, string> users;
+    int id, f_id;   // Variables to store user ID and follower ID.
+    string user_name;
+    bool user_flag = false, follower_flag = false, name_flag = false, posts_flag = false;   // Flags to track parsing states.
 
-    // Process the tokenized input line by line.
-    while (buffer >> token) {
+    for (int i = 0; i < vec.size(); i++) {
         // Start of a user tag.
-        if (!token.compare("user")) {
+        if (!vec[i].compare("<user>")) {
             user_flag = true;
         }
         // When inside a user tag, parse the user ID (if not in follower or name/posts sections).
-        else if (user_flag && !token.compare("id") && !follower_flag && !name_posts_flag) {
-            buffer >> token;
-            id = stoi(token);           // Convert the ID token to an integer.
+        else if (user_flag && !vec[i].compare("<id>") && !follower_flag && !name_flag && !posts_flag) {
+            i++;
+            id = stoi(vec[i]);           // Convert the ID token to an integer.
             g->addVertex(id);           // Add the user as a vertex in the graph.
         }
+        // Start of a name tag.
+        else if (!vec[i].compare("<name>")) {
+            name_flag = true;
+            i++;
+            user_name = vec[i];
+        }
+        // End of a name tag.
+        else if (!vec[i].compare("</name>")) {
+            name_flag = false;
+        }
         // End of a user tag.
-        else if (!token.compare("/user")) {
+        else if (!vec[i].compare("</user>")) {
             user_flag = false;
+            users[id] = user_name;
         }
         // Start of a follower tag.
-        else if (!token.compare("follower")) {
+        else if (!vec[i].compare("<follower>")) {
             follower_flag = true;
         }
         // When inside a follower tag, parse the follower ID.
-        else if (follower_flag && !token.compare("id")) {
-            buffer >> token;
-            f_id = stoi(token);        // Convert the follower ID token to an integer.
+        else if (follower_flag && !vec[i].compare("<id>")) {
+            i++;
+            f_id = stoi(vec[i]);        // Convert the follower ID token to an integer.
             g->addEdge(id, f_id);      // Add an edge from the user to the follower in the graph.
         }
         // End of a follower tag.
-        else if (!token.compare("/follower")) {
+        else if (!vec[i].compare("</follower>")) {
             follower_flag = false;
         }
-        // Start of a name or posts tag.
-        else if (!token.compare("posts") || !token.compare("name")) {
-            name_posts_flag = true;
+        // Start of posts tag.
+        else if (!vec[i].compare("<posts>")) {
+            posts_flag = true;
         }
         // End of a name or posts tag.
-        else if (!token.compare("/posts") || !token.compare("/name")) {
-            name_posts_flag = false;
+        else if (!vec[i].compare("</posts>")) {
+            posts_flag = false;
         }
-
+        
     }
-
+    g->setUsers(users);
     // Return the constructed graph.
     return g;
 }
+
 
 // Function to generate a JPG image from a DOT file using the Graphviz tool.
 void generateJpgFromDot(const string& dotFile, const string& jpgFile) {
@@ -170,6 +181,7 @@ void generateJpgFromDot(const string& dotFile, const string& jpgFile) {
 int main() {
 
     Graph* g = generateGraph("already_prettified.txt");
+    g->printUsers();
     string dotFile = g->generateDotFile();
     generateJpgFromDot(dotFile, "graph.jpg");
 

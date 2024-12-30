@@ -12,8 +12,11 @@ class Graph {
 private:
     // Adjacency list representation
     unordered_map<int, list<int>> m;
+    unordered_map<int, string> users;
 
 public:
+
+    void setUsers(unordered_map<int, string> u);
 
     // Add a vertex to the graph
     void addVertex(int u);
@@ -24,11 +27,17 @@ public:
     // return the map
     unordered_map<int, list<int>> getMap();
 
+    // return the users
+    unordered_map<int, string> getUsers();
+
     // Generate a DOT file from the graph
     string generateDotFile();
 
     // Display the graph (for debugging purposes)
     void printGraph();
+
+    // Display users nams and ids (for debugging purposes)
+    void printUsers();
 };
 
 // Function to generate a graph from an XML file.

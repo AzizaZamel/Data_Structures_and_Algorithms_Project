@@ -12,50 +12,15 @@
 #include <fstream>
 #include <sstream>
 #include "prettify.hpp"
+#include "xml_helper.h"
 #include <stdexcept>
 
 #define INDENT_SPACES           4
 #define MAX_CONTENT_LENGTH      20
 
-/* Function to read the contents of a file and return it as a string */
-string fileToString(const string& filename) {
-    // Open the file
-    ifstream file(filename); 
-    // Check if the file is successfully opened
-    if (!file.is_open()) {
-        // If the file couldn't be opened, throw an exception with an error message
-        throw std::runtime_error("Can't open file: " + filename);
-    }
-
-    // Create a stringstream to hold the file contents
-    stringstream buffer;
-    // Read file contents into buffer
-    buffer << file.rdbuf(); 
-
-    file.close();        // Close the file
-    return buffer.str(); // Return the file contents as a string
-}
-
-/* Function to write the contents of a string to a file */
-void stringToFile(string& content,const string& filename) {
-    // Create an ofstream object to open the file with the given filename
-    ofstream fileOut(filename);
-    // Check if the file is successfully opened
-    if (!fileOut.is_open()) {
-        // If the file couldn't be opened, print an error message and return 
-        std::cerr << "Error: Could not open output file: " << filename << std::endl;
-        return;
-    }
-
-    // Write the content of the string to the file
-    fileOut << content;
-
-    // Close the file
-    fileOut.close();
-}
 
 /* This function takes an XML - like string as input and returns a prettified string as output.
- * It formats the input by adding indentation based on the nesting level of tags, handling both 
+ * It formats the input by adding indentation based on the nesting level of tags, handling both
  * self-closing and closing tags. The result is a string with properly indented tags and data.
 */
 string prettifyString(const string& input_str) {
@@ -77,7 +42,7 @@ string prettifyString(const string& input_str) {
                 // Disable the first line flag after processing.
                 first_line = false;
             }
-            else if ( !(input_str[i + 1] == '/' && short_content_flag) ) {
+            else if (!(input_str[i + 1] == '/' && short_content_flag)) {
                 prettified << '\n';
             }
 
@@ -95,16 +60,16 @@ string prettifyString(const string& input_str) {
                 if (input_str[i + 1] == '/' && short_content_flag) {
 
                     // Reset short content flag for closing tags.
-                    short_content_flag = false;  
+                    short_content_flag = false;
                 }
                 else {
                     prettified << string(depth * INDENT_SPACES, ' ');
                 }
-                
+
             }
 
             // Loop until we find the end of the current tag (denoted by '>').
-            while (input_str[i] != '>' && input_str[i]!='\0') {
+            while (input_str[i] != '>' && input_str[i] != '\0') {
 
                 // If we find a self-closing tag ('/>') or a closing tag ('</'), decrease the depth.
                 if (input_str[i] == '/' && ((input_str[i + 1] == '>') || (input_str[i - 1] == '<'))) {
@@ -130,7 +95,7 @@ string prettifyString(const string& input_str) {
                 depth--;
                 comment_flag = false;
             }
-            
+
         }
         // Check if the character is not a space, tab, or newline (i.e., it's part of data).
         else if (input_str[i] != ' ' && input_str[i] != '\t' && input_str[i] != '\n') {
@@ -164,7 +129,7 @@ string prettifyString(const string& input_str) {
 /* This function reads an XML - like file, prettifies its content, and writes the formatted result to another file.
  * It takes an input file name and an output file name as arguments, processes the content, and saves the prettified string.
 */
-void prettifyXML(const string& inputFileName,const string& outputFileName) {
+void prettifyXML(const string& inputFileName, const string& outputFileName) {
     // Read the content of the input file and store it in 'content'
     string content = fileToString(inputFileName);
 
@@ -182,8 +147,8 @@ void prettifyXML(const string& inputFileName,const string& outputFileName) {
 //int main()
 //{
 //    try {
-//        prettifyXML("example.txt", "output.txt");
-//        string output = fileToString("output.txt");
+//        prettifyXML("sample.xml", "C:\\Users\\hp\\Downloads\\output.txt");
+//        string output = fileToString("C:\\Users\\hp\\Downloads\\output.txt");
 //        cout<<output<<endl;
 //
 //    }
@@ -192,5 +157,4 @@ void prettifyXML(const string& inputFileName,const string& outputFileName) {
 //    }
 //    return 0;
 //}
-
 

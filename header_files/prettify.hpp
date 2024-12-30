@@ -14,13 +14,6 @@
 #include <string>
 using namespace std;
 
-
-/* Function to read the contents of a file and return it as a string */
-string fileToString(const string& filename);
-
-/* Function to write the contents of a string to a file */
-void stringToFile(string& content, const string& filename);
-
 /* This function takes an XML - like string as input and returns a prettified string as output.
  * It formats the input by adding indentation based on the nesting level of tags, handling both
  * self-closing and closing tags. The result is a string with properly indented tags and data.
