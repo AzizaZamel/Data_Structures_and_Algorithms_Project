@@ -58,8 +58,9 @@ void MainWindow::onSearchButtonClicked()
     if (!results.empty()) {
         // If results are found, display them
         ui->textEdit->setPlainText(QString::fromStdString(results));
-    } else {
+    } /*else {
         // If no results are found, display a default message
         ui->textEdit->setPlainText("No results found.");
-    }
+    }*/
 }
+
