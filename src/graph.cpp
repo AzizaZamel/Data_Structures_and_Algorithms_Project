@@ -23,6 +23,11 @@ void Graph::addVertex(int u) {
 	m[u] = list<int>();
 }
 
+// return the map
+unordered_map<int, list<int>> Graph::getMap() {
+    return m;
+}
+
 // Display the graph (for debugging purposes)
 void Graph::printGraph() {
 	for (const auto& pair : m) {
@@ -62,7 +67,7 @@ string Graph::generateDotFile() {
 		else {
 			// Add edges for each vertex in the adjacency list
 			for (const auto& vertex : pair.second) {
-				dotFile << pair.first << " -> " << vertex << ";\n";
+				dotFile << vertex << " -> " << pair.first << ";\n";
 			}
 		}
 

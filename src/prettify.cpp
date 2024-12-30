@@ -182,8 +182,8 @@ void prettifyXML(const string& inputFileName,const string& outputFileName) {
 //int main()
 //{
 //    try {
-//        prettifyXML("sample.xml", "C:\\Users\\hp\\Downloads\\output.txt");
-//        string output = fileToString("C:\\Users\\hp\\Downloads\\output.txt");
+//        prettifyXML("example.txt", "output.txt");
+//        string output = fileToString("output.txt");
 //        cout<<output<<endl;
 //
 //    }
