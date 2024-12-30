@@ -21,6 +21,9 @@ public:
     // Add an edge from startVertex to endVertex
     void addEdge(int startVertex, int endVertex);
 
+    // return the map
+    unordered_map<int, list<int>> getMap();
+
     // Generate a DOT file from the graph
     string generateDotFile();
 
