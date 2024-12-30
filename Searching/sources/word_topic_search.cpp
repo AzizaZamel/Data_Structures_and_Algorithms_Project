@@ -67,7 +67,7 @@ string search_by_word( const string &filename, const std::string &word) {
 
     // Regular expression to match the word as a whole word
     std::string regexPattern = "\\b" + word + "\\b"; // Word boundaries for exact match
-    std::regex wordRegex(regexPattern); // Case-insensitive search
+    std::regex wordRegex(regexPattern); 
 
     // Iterate through each post
     for (const post &a : posts) {
