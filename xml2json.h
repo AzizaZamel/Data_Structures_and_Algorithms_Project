@@ -2,16 +2,17 @@
 #define XML2JSON_H
 
 #include <stdbool.h> // For the boolean type if required in the function prototypes
-#include <string>    // For std::string if using C++
-
+#include <string> // For std::string if using C++
+#include <vector>
+using namespace std;
 // Function declarations
-bool is_start(const char *str);
-bool is_end(const char *str);
-bool is_string(const char *str);
-const char* start_string(const char *str);
-const char* end_string(const char *str);
-bool is_arr(const char *str);
-void trimTrailingWhitespace(char *str);
-char* convertXmlToJson(const char *xmlStr);
+bool is_start(string s);
+bool is_end(string s);
+bool is_string(string s) ;
+string start_string(string s);
+string end_string(string s);
+bool is_arr(vector<string>v, int a, int b, string g);
+void trimTrailingWhitespace(string& str);
+void convertXmlToJson(const string& inputFile, const string& outputFile);
 
 #endif // XML2JSON_H
