@@ -1,43 +1,38 @@
 /*
- * word&topic_search.h
- *  Created on: Dec 28, 2024
- *   Author: Doaa
- *
- *  Description:
- *  This header file defines the structure and functions used for parsing an XML file
- *  and searching within user posts. It includes:
- *  - A `Post` struct to represent individual posts with their body and associated topics.
- *  - Declarations of functions for retrieving posts and performing searches by word or topic.
- *
- *  Dependencies include XML utility and parsing libraries for handling the XML file.
+ ===================================================================================================
+ Name        : word_topic_search.h
+ Author      : Doaa Said
+ Description :header file declares the post structure, along with function
+ prototypes retrieving posts, and searching by word or topic.
+ It includes necessary libraries for string handling, regular expressions,
+ and XML parsing.
+ Date        : 18/12/2024
+ ===================================================================================================
  */
-
-#ifndef WORD_TOPIC_SEARCH_H_
+#ifndef WORD_TOPIC_SEARCH_H_  // Include guard to prevent multiple inclusions of this header file
 #define WORD_TOPIC_SEARCH_H_
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <regex>
-#include "xml_util.hpp"
-#include "xml_node.hpp"
-#include "xml_parser.hpp"
+#include <iostream>  // Include iostream for input/output operations
+#include <string>    // Include string library for string handling
+#include <vector>    // Include vector library for dynamic array handling
+#include <regex>     // Include regex library for regular expression handling
+#include "xml_helper.h"  // Include external header for XML helper functions
 
 using namespace std;
 
 // Define the structure for a Post
-struct Post {
-    std::string body;
-    std::vector<std::string> topics;
+struct post {
+    string body;                  // Post body content (a string)
+    vector<string> topics; // List of topics associated with the post (vector of strings)
 };
 
 // Function to get all posts from the XML file
-vector<Post> get_posts(string filename);
+vector<post> get_posts(const string &filename); // Parses the XML file and returns a vector of posts
 
 // Function to search for a word in the posts and return matching posts
-string search_by_word(string filename, string word);
+ std::string search_by_word( const  string&filename, const std::string &word); // Searches posts for a specific word
 
 // Function to search for posts by a specific topic
-string search_by_topic(string filename, string topic);
+std::string search_by_topic( const string &filename, const std::string & topic); // Searches posts by topic
 
-#endif /* WORD_TOPIC_SEARCH_H_ */
+#endif /* WORD_TOPIC_SEARCH_H_ */  // End of the include guard
