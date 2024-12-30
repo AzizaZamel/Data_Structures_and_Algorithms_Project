@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
+#include "xml_helper.hpp"
 using namespace std;
 
 bool is_start(string s) {   //checks if string is a start tag
@@ -123,13 +124,6 @@ vector<string> parser(const string& inputFile) {
 
     // Trim trailing spaces
     for (unsigned int i = 0; i < v.size(); i++) {
-        trimTrailingWhitespace(v[i]);
-    }
-    return v;
-}
-
-    // Trim trailing spaces
-    for (int i = 0; i < v.size(); i++) {
         trimTrailingWhitespace(v[i]);
     }
     return v;
