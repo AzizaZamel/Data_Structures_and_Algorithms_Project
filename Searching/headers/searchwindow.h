@@ -8,7 +8,7 @@
 #include "word_topic_search.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class SearchWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -24,7 +24,7 @@ private slots:
     void onSearchButtonClicked(); // Slot for handling search button clicks
 
 private:
-    Ui::MainWindow *ui;
+    Ui::SearchWindow *ui;
    string xmlFile ;
 };
 
