@@ -16,7 +16,6 @@
 #include <stdexcept>
 
 #define INDENT_SPACES           4
-#define MAX_CONTENT_LENGTH      20
 
 
 /* This function takes an XML - like string as input and returns a prettified string as output.
@@ -29,7 +28,6 @@ string prettifyString(const string& input_str) {
     int size = input_str.size();   // Get the length of the input string.
     bool comment_flag = false;     // Flag to detect if the current tag is a comment.
     bool first_line = true;        // Flag to manage formatting of the very first line.
-    bool short_content_flag = false;   // Flag for handling short content between tags.
 
     // Loop through the entire input string character by character.
     for (int i = 0; i < size; i++) {
@@ -42,7 +40,7 @@ string prettifyString(const string& input_str) {
                 // Disable the first line flag after processing.
                 first_line = false;
             }
-            else if (!(input_str[i + 1] == '/' && short_content_flag)) {
+            else {
                 prettified << '\n';
             }
 
@@ -57,15 +55,7 @@ string prettifyString(const string& input_str) {
             }
             // Add the appropriate number of spaces for indentation based on depth.
             if (depth != -1) {
-                if (input_str[i + 1] == '/' && short_content_flag) {
-
-                    // Reset short content flag for closing tags.
-                    short_content_flag = false;
-                }
-                else {
-                    prettified << string(depth * INDENT_SPACES, ' ');
-                }
-
+                prettified << string(depth * INDENT_SPACES, ' ');
             }
 
             // Loop until we find the end of the current tag (denoted by '>').
@@ -99,25 +89,20 @@ string prettifyString(const string& input_str) {
         }
         // Check if the character is not a space, tab, or newline (i.e., it's part of data).
         else if (input_str[i] != ' ' && input_str[i] != '\t' && input_str[i] != '\n') {
-            string content;   // Buffer to collect content between tags.
+
+            // Add the appropriate number of spaces for indentation based on depth.
+            prettified << '\n' << string((depth + 1) * INDENT_SPACES, ' ');
 
             // Collect all characters until encountering a '<', newline, or end of input.
             while (input_str[i] != '<' && input_str[i] != '\n' && input_str[i] != '\0') {
 
-                content += input_str[i];
+                // Add the current character to the prettified output.
+                prettified << input_str[i];
+
+                // Move to the next character.
                 i++;
             }
-            i--;         // Adjust index to reprocess the last character.
-
-            // If the content exceeds the max length, insert a newline and indent it.
-            if (content.size() > MAX_CONTENT_LENGTH) {
-                prettified << '\n' << string((depth + 1) * INDENT_SPACES, ' ') << content;
-            }
-            else {
-                short_content_flag = true;     // Set flag for inline content.
-                prettified << content;         // Append content inline.
-            }
-
+            i--;
         }
     }
 
@@ -143,17 +128,17 @@ void prettifyXML(const string& inputFileName, const string& outputFileName) {
 
 // test prettify operation
 
-//
+
 //int main()
 //{
 //    try {
-//        prettifyXML("sample.xml", "C:\\Users\\hp\\Downloads\\output.txt");
-//        string output = fileToString("C:\\Users\\hp\\Downloads\\output.txt");
+//        prettifyXML("example.txt", "output.txt");
+//        string output = fileToString("output.txt");
 //        cout<<output<<endl;
 //
 //    }
 //    catch (const exception& e) {
-//        cerr << "Error: " << e.what() << std::endl;
+//        cerr << "error: " << e.what() << std::endl;
 //    }
 //    return 0;
 //}
