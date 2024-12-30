@@ -28,7 +28,7 @@ bool is_end(string s) {     //checks if string is an end tag
 }
 
 bool is_string(string s) {      //checks if string is data
-    for (int i = 1;i < s.size();i++) {
+    for (unsigned int i = 1;i < s.size();i++) {
         if (s[0] == '<' && s[i] == '>') {
             return false;
         }
@@ -100,7 +100,7 @@ vector<string> parser(const string& inputFile) {
     xmlString.erase(remove(xmlString.begin(), xmlString.end(), '\t'), xmlString.cend());
 
     // Get each tag and store it in the vector
-    for (int i = 0; i < xmlString.size(); i++) {
+    for (unsigned int i = 0; i < xmlString.size(); i++) {
         int word_size = 0;
         if (xmlString[i] == '<') {
             word_size++;
@@ -112,14 +112,21 @@ vector<string> parser(const string& inputFile) {
         }
         else if (xmlString[i] == ' ') continue;
         else {
-            int start = i;
-            while (i < xmlString.size() && xmlString[i] != '<') {
+            unsigned int start = i;
+            while ( i < xmlString.size() && xmlString[i] != '<') {
                 i++;
             }
             v.push_back(xmlString.substr(start, i - start));
             i--;  // Adjust i to stay on the correct position (before '<' for next iteration)
         }
     }
+
+    // Trim trailing spaces
+    for (unsigned int i = 0; i < v.size(); i++) {
+        trimTrailingWhitespace(v[i]);
+    }
+    return v;
+}
 
     // Trim trailing spaces
     for (int i = 0; i < v.size(); i++) {
