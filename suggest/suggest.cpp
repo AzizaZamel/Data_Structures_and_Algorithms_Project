@@ -43,6 +43,7 @@ void suggest(const unordered_map<int, list<int>>& m, int userId) {
         }
 
     }
+    //prints suggested users
     cout << "User " << userId << " suggestions are: " << endl;
     if (result.empty()) {
         cout << "No suggestions available.\n";
@@ -54,16 +55,19 @@ void suggest(const unordered_map<int, list<int>>& m, int userId) {
     }
 }
 
+void print_suggested(const string& filename, int userId) {
+    Graph* g = generateGraph(filename);
+
+    suggest(g->getMap(), userId);
+}
+
 /*
 //usage example:
 int main(int argc, char* argv[]) {
     string inputFile = "C:\\Users\\Acer\\Desktop\\Hana\\suggest\\suggest\\x64\\Debug\\sample.xml";
     int userId = 1;
 
-    // Generate the graph from the input XML file
-    Graph* g = generateGraph(inputFile);
-
-    suggest(g->getMap(), userId);
+    print_suggested(inputFile, userId);
 
     return 0;
 }

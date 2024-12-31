@@ -12,6 +12,9 @@ using namespace std;
 // Function to determine who a given userId follows
 vector<int> printWhoUserFollows(const unordered_map<int, list<int>>& m, int userId);
 
+//Create suggestion from generated graph
 void suggest(const unordered_map<int, list<int>>& m, int userId);
 
+//generates graph and runs suggest function
+void print_suggested(const string& filename, int userId);
 #endif
