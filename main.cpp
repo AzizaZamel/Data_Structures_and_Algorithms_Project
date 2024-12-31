@@ -135,9 +135,15 @@ void MainWindow::XML2json() {
 
     try {
         // Convert QString to std::string for the function call
-       ::convertXmlToJson(inputFilePath.toStdString(), outputFileName.toStdString());
-        fileContent->loadFile(outputFileName,100);
-
+        ::convertXmlToJson(inputFilePath.toStdString(), outputFileName.toStdString());
+        QFile file(outputFileName);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            fileContent->setPlainText(in.readAll());
+            file.close();
+        } else {
+            QMessageBox::warning(this, "Error", "Unable to open the selected file!");
+        }
         QMessageBox::information(this, "Success", "File formatted and saved to: " + outputFileName);
     } catch (const std::exception &e) {
         QMessageBox::critical(this, "Error", QString("Failed to convert the XML file: %1").arg(e.what()));
@@ -149,21 +155,28 @@ void MainWindow::minifyXML() {
         return;
     }
 
+    QString outputFileName = QFileDialog::getSaveFileName(this, "Save Formatted XML", "", "TXT Files (*.txt)");
+    if (outputFileName.isEmpty()) {
+        return;
+    }
+
     try {
-        // Read the current content from the text editor
-        QString currentContent = fileContent->toPlainText();
-
-        // Use the minify_string function to minify the content
-        std::string minifiedContent;
-        minify_string(currentContent.toStdString(),minifiedContent);
-
-        // Display the prettified content in the QTextEdit
-        fileContent->setPlainText(QString::fromStdString(minifiedContent));
-        QMessageBox::information(this, "Success", "XML content has been minified and updated in the editor!");
+        // Convert QString to std::string for the function call
+        ::minify_xml_file(inputFilePath.toStdString(), outputFileName.toStdString());
+        QFile file(outputFileName);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            fileContent->setPlainText(in.readAll());
+            file.close();
+        } else {
+            QMessageBox::warning(this, "Error", "Unable to open the selected file!");
+        }
+        QMessageBox::information(this, "Success", "File formatted and saved to: " + outputFileName);
     } catch (const std::exception &e) {
-        QMessageBox::critical(this, "Error", QString("Failed to prettify the content: %1").arg(e.what()));
+        QMessageBox::critical(this, "Error", QString("Failed to convert the XML file: %1").arg(e.what()));
     }
 }
+
 
 void MainWindow::saveFile() {
     QString outputFileName = QFileDialog::getSaveFileName(this, "Save File As", "", "Text Files (*.txt);;XML Files (*.xml);;All Files (*)");

@@ -27,6 +27,11 @@ set(PROJECT_SOURCES
         compressor.cpp
         largefileviewer.cpp
         largefileviewer.h
+        searchwindow.cpp
+        searchwindow.h
+        searchwindow.ui
+        word_topic_search.cpp
+        word_topic_search.h
 
 
 
