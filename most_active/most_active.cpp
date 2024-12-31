@@ -16,7 +16,7 @@ void helper_function(const string& xmlfile) {
 }
 
 
-string most_active_user(Graph* g) {
+void most_active_user(Graph* g) {
     unordered_map<int, string> users = g->getUsers(); // Get users from the graph
     unordered_map<int, int> in_degree; // To count in-degrees for each user
     unordered_map<int, int> out_degree; // To count out-degrees for each user
@@ -57,7 +57,7 @@ string most_active_user(Graph* g) {
     // Return the most active user's name and ID based on in-degree + out-degree sum
     string result = "Most Active User (In + Out Degree): " + most_active_name + ", ID: " + to_string(most_active_id);
 
-    return result;
+    cout << result;
 }
 
 // Test the function 
@@ -66,10 +66,8 @@ int main() {
     Graph* t = generateGraph("already_prettified.txt");
     t->printUsers();
 
-
     // Find and print the most active user
-    string active_user_info = most_active_user(t);
-    cout << active_user_info << endl;
+    most_active_user(t);
 
     delete t; // Clean up the dynamically allocated graph
     return 0;
