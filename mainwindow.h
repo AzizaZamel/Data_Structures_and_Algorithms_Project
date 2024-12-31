@@ -24,6 +24,8 @@ private slots:
     void XML2json();
     void compressXML();
     void openSearchWindow();
+    void checkXML();
+    void graphXML();
 private:
     QString inputFilePath;   // Store the selected XML file path
     QLabel *fileLabel;       // Label to display the file name
