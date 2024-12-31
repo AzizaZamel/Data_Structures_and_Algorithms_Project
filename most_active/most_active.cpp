@@ -16,7 +16,7 @@ void helper_function(const string& xmlfile) {
 }
 
 
-void most_active_user(Graph* g) {
+string most_active_user(Graph* g) {
     unordered_map<int, string> users = g->getUsers(); // Get users from the graph
     unordered_map<int, int> in_degree; // To count in-degrees for each user
     unordered_map<int, int> out_degree; // To count out-degrees for each user
@@ -55,9 +55,10 @@ void most_active_user(Graph* g) {
     }
 
     // Return the most active user's name and ID based on in-degree + out-degree sum
-    string result = "Most Active User (In + Out Degree): " + most_active_name + ", ID: " + to_string(most_active_id);
-
+    string result = "Most Active User (In + Out Degree): " + most_active_name + ", ID: " + to_string(most_active_id) + " ,its maximum degree: " + to_string(max_degree_sum) ;
     cout << result;
+
+    return result ;
 }
 
 // Test the function 
