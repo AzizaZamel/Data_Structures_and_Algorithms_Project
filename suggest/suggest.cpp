@@ -65,22 +65,20 @@ void printS(unordered_set<int> result, int userId) {
     }
 }
 
-unordered_set<string> printS_string(const unordered_set<int>& result, int userId) {
-    unordered_set<string> stringResult; // To store the string type of the result
+string printS_string(const unordered_set<int>& result, int userId) {
+    string stringResult = ""; // To store the string type of the result
 
-    cout << "User " << userId << " suggestions are: " << endl;
     if (result.empty()) {
-        cout << "No suggestions available.\n";
+        stringResult = "No suggestions available.\n";
+        return stringResult;
     }
     else {
         for (int suggestion : result) {
             string suggestionStr = to_string(suggestion); // Convert int to string
-            stringResult.insert(suggestionStr);           // Add to string result set
-            cout << suggestionStr << endl;               // Print the suggestion
+            stringResult += suggestionStr + " ";           // Add to string
         }
     }
-
-    return stringResult; // Return the set of strings
+    return stringResult; // Return suggested users as string
 }
 
 /*
@@ -91,7 +89,7 @@ int main(int argc, char* argv[]) {
     int userId = 1;
 
     result = print_suggested(inputFile, userId);
-    printS_string(result, userId);
+    cout << printS_string(result, userId);
     
     return 0;
 }
