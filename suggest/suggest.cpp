@@ -23,7 +23,7 @@ vector<int> printWhoUserFollows(const unordered_map<int, list<int>>& m, int user
     return usersFollowed;
 }
 
-void suggest(const unordered_map<int, list<int>>& m, int userId) {
+unordered_set<int> suggest(const unordered_map<int, list<int>>& m, int userId) {
     vector<int> following;      //vector to hold users that userId follows
     vector<int> following_2;    //vector to hold the followers of the followers
     unordered_set<int> result;  //unordered set to avoid duplicates
@@ -43,6 +43,25 @@ void suggest(const unordered_map<int, list<int>>& m, int userId) {
         }
 
     }
+    return result;
+}
+
+unordered_set<int> print_suggested(const string& filename, int userId) {
+    Graph* g = generateGraph(filename);
+
+    return suggest(g->getMap(), userId);
+
+}
+
+/*
+//usage example:
+int main(int argc, char* argv[]) {
+    unordered_set<int> result;
+    string inputFile = "C:\\Users\\Acer\\Desktop\\Hana\\suggest\\suggest\\x64\\Debug\\sample.xml";
+    int userId = 1;
+
+    result = print_suggested(inputFile, userId);
+
     //prints suggested users
     cout << "User " << userId << " suggestions are: " << endl;
     if (result.empty()) {
@@ -53,22 +72,6 @@ void suggest(const unordered_map<int, list<int>>& m, int userId) {
             cout << suggestion << endl;
         }
     }
-}
-
-void print_suggested(const string& filename, int userId) {
-    Graph* g = generateGraph(filename);
-
-    suggest(g->getMap(), userId);
-}
-
-/*
-//usage example:
-int main(int argc, char* argv[]) {
-    string inputFile = "C:\\Users\\Acer\\Desktop\\Hana\\suggest\\suggest\\x64\\Debug\\sample.xml";
-    int userId = 1;
-
-    print_suggested(inputFile, userId);
-
     return 0;
 }
 */
