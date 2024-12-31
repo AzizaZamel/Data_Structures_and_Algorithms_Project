@@ -61,7 +61,11 @@ Node* buildHuffmanTree(map<char, int>& frequencies) {
 }
 
 // Write compressed data to file
+<<<<<<< HEAD
 void writeCompressedFile(const string& input,const map<char, string>& huffmanCodes,const string& outputFile) {
+=======
+void writeCompressedFile(string& input, map<char, string>& huffmanCodes, string& outputFile) {
+>>>>>>> 07b4d226e285f17d00fa4faed3dbeb8e3fc06d7e
     ofstream outFile(outputFile, ios::binary); // making a bin file (compressed)
     if (!outFile) {
         cerr << "Error opening file for writing: " << outputFile << endl;
@@ -88,7 +92,11 @@ void writeCompressedFile(const string& input,const map<char, string>& huffmanCod
     outFile.close();
 }
 // File to string stream function
+<<<<<<< HEAD
 string filetoss(const string& filename) {
+=======
+string filetoss(string& filename) {
+>>>>>>> 07b4d226e285f17d00fa4faed3dbeb8e3fc06d7e
     ifstream file(filename); // Open the file
     if (!file.is_open()) {
         cerr << "Can't open file";
@@ -101,7 +109,11 @@ string filetoss(const string& filename) {
     return buffer.str();  
 }
 // Main compression function
+<<<<<<< HEAD
 void compressXML(const string& inputFile,const string& outputFile) {
+=======
+void compressXML(string& inputFile, string& outputFile) {
+>>>>>>> 07b4d226e285f17d00fa4faed3dbeb8e3fc06d7e
    
     // Read input file content
     string input = filetoss(inputFile);
