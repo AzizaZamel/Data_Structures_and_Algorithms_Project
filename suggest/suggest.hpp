@@ -13,8 +13,8 @@ using namespace std;
 vector<int> printWhoUserFollows(const unordered_map<int, list<int>>& m, int userId);
 
 //Create suggestion from generated graph
-void suggest(const unordered_map<int, list<int>>& m, int userId);
+unordered_set<int> suggest(const unordered_map<int, list<int>>& m, int userId);
 
 //generates graph and runs suggest function
-void print_suggested(const string& filename, int userId);
+unordered_set<int> print_suggested(const string& filename, int userId);
 #endif
