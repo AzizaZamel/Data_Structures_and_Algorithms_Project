@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *searchButton = new QPushButton("Search", this);
     QPushButton *checkButton = new QPushButton("Check consistency", this);
     QPushButton *graphButton = new QPushButton("Visualize", this);
+    QPushButton *NAButton = new QPushButton("Network analysis", this);
     fileLabel = new QLabel("No file selected", this);
     fileContent = new LargeFileViewer(this);
     fileContent->setReadOnly(true); // Allow editing if needed
@@ -55,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(searchButton, &QPushButton::clicked, this, &MainWindow::openSearchWindow);
     connect(checkButton, &QPushButton::clicked, this, &MainWindow::checkXML);
     connect(graphButton, &QPushButton::clicked, this, &MainWindow::graphXML);
+    connect(NAButton, &QPushButton::clicked, this, &MainWindow::NAXML);
     // Left layout (buttons and label)
     QVBoxLayout *buttonLayout = new QVBoxLayout();
     buttonLayout->addWidget(fileLabel);
@@ -67,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     buttonLayout->addWidget(searchButton);
     buttonLayout->addWidget(checkButton);
     buttonLayout->addWidget(graphButton);
+    buttonLayout->addWidget(NAButton);
     buttonLayout->addStretch(1);
 
     QWidget *buttonWidget = new QWidget(this);
@@ -83,7 +86,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     setCentralWidget(splitter);
 }
+void MainWindow::NAXML(){
 
+}
 void MainWindow::graphXML(){
     Graph *g = generateGraph(inputFilePath.toStdString());
     g->printUsers();
@@ -99,7 +104,7 @@ void MainWindow::graphXML(){
     QVBoxLayout *layout = new QVBoxLayout(imageWindow);
 
     // Create a QGraphicsView to display the image
-    QGraphicsView *view = new  QGraphicsView(imageWindow);
+    QGraphicsView *view = new QGraphicsView(imageWindow);
     QGraphicsScene *scene = new QGraphicsScene(view);
 
     // Load the image
@@ -185,7 +190,7 @@ void MainWindow::checkXML(){
                     return;
                 }
                 else{QMessageBox::information(this, "Success", "File formatted and saved to: " + outputFileName);}
-                checker.fixXml(inputFilePath.toStdString(),outputFileName.toStdString()); // Call the fixXml function
+                checker.fixXml(xmlstring,outputFileName.toStdString()); // Call the fixXml function
                 QFile file(outputFileName);
                 if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     QTextStream in(&file);
