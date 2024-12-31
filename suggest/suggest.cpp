@@ -53,16 +53,7 @@ unordered_set<int> print_suggested(const string& filename, int userId) {
 
 }
 
-/*
-//usage example:
-int main(int argc, char* argv[]) {
-    unordered_set<int> result;
-    string inputFile = "C:\\Users\\Acer\\Desktop\\Hana\\suggest\\suggest\\x64\\Debug\\sample.xml";
-    int userId = 1;
-
-    result = print_suggested(inputFile, userId);
-
-    //prints suggested users
+void printS(unordered_set<int> result, int userId) {
     cout << "User " << userId << " suggestions are: " << endl;
     if (result.empty()) {
         cout << "No suggestions available.\n";
@@ -72,6 +63,18 @@ int main(int argc, char* argv[]) {
             cout << suggestion << endl;
         }
     }
+}
+
+/*
+//usage example:
+int main(int argc, char* argv[]) {
+    unordered_set<int> result;
+    string inputFile = "C:\\Users\\Acer\\Desktop\\Hana\\suggest\\suggest\\x64\\Debug\\sample.xml";
+    int userId = 1;
+
+    result = print_suggested(inputFile, userId);
+    printS(result, userId);
+    
     return 0;
 }
 */

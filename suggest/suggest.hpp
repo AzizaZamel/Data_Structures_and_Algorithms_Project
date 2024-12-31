@@ -17,4 +17,8 @@ unordered_set<int> suggest(const unordered_map<int, list<int>>& m, int userId);
 
 //generates graph and runs suggest function
 unordered_set<int> print_suggested(const string& filename, int userId);
+
+//prints results of print_suggested function
+void printS(unordered_set<int> result, int userId);
+
 #endif
