@@ -21,4 +21,7 @@ unordered_set<int> print_suggested(const string& filename, int userId);
 //prints results of print_suggested function
 void printS(unordered_set<int> result, int userId);
 
+//turns result content to string and prints it
+unordered_set<string> printS_string(const unordered_set<int>& result, int userId);
+
 #endif
