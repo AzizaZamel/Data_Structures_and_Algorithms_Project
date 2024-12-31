@@ -62,7 +62,7 @@ string most_active_user(Graph* g) {
 }
 
 // Test the function 
-
+/*
 int main() {
     Graph* t = generateGraph("already_prettified.txt");
     t->printUsers();
@@ -73,3 +73,4 @@ int main() {
     delete t; // Clean up the dynamically allocated graph
     return 0;
 }
+*/
