@@ -61,11 +61,7 @@ Node* buildHuffmanTree(map<char, int>& frequencies) {
 }
 
 // Write compressed data to file
-<<<<<<< HEAD
-void writeCompressedFile(const string& input,const map<char, string>& huffmanCodes,const string& outputFile) {
-=======
-void writeCompressedFile(string& input, map<char, string>& huffmanCodes, string& outputFile) {
->>>>>>> 07b4d226e285f17d00fa4faed3dbeb8e3fc06d7e
+void writeCompressedFile(const string& input, map<char, string>& huffmanCodes, const string& outputFile) {
     ofstream outFile(outputFile, ios::binary); // making a bin file (compressed)
     if (!outFile) {
         cerr << "Error opening file for writing: " << outputFile << endl;
@@ -80,11 +76,11 @@ void writeCompressedFile(string& input, map<char, string>& huffmanCodes, string&
 
     // Convert to binary and write
     stringstream buffer;
-    // Writing byte by byte 
+    // Writing byte by byte
     for (int i = 0 ; i < encodedString.size(); i += 8) {
         bitset<8> byte(encodedString.substr(i , 8));
-        buffer.put(static_cast<unsigned char>(byte.to_ulong())); 
-        /* regarding the line above , honestly chatgpt suggested 
+        buffer.put(static_cast<unsigned char>(byte.to_ulong()));
+        /* regarding the line above , honestly chatgpt suggested
         this static cast to protect from bad alloc*/
     }
 
@@ -92,32 +88,24 @@ void writeCompressedFile(string& input, map<char, string>& huffmanCodes, string&
     outFile.close();
 }
 // File to string stream function
-<<<<<<< HEAD
 string filetoss(const string& filename) {
-=======
-string filetoss(string& filename) {
->>>>>>> 07b4d226e285f17d00fa4faed3dbeb8e3fc06d7e
     ifstream file(filename); // Open the file
     if (!file.is_open()) {
         cerr << "Can't open file";
-        
+
     }
 
     stringstream buffer;
     buffer << file.rdbuf();
     file.close();
-    return buffer.str();  
+    return buffer.str();
 }
 // Main compression function
-<<<<<<< HEAD
-void compressXML(const string& inputFile,const string& outputFile) {
-=======
-void compressXML(string& inputFile, string& outputFile) {
->>>>>>> 07b4d226e285f17d00fa4faed3dbeb8e3fc06d7e
-   
+void compressXML(const string& inputFile, const string& outputFile) {
+
     // Read input file content
     string input = filetoss(inputFile);
-   
+
 
     // Calculate character frequencies
     map<char, int> frequencies;
@@ -137,3 +125,4 @@ void compressXML(string& inputFile, string& outputFile) {
 
     cout << "File compressed successfully to " << outputFile << endl;
 }
+

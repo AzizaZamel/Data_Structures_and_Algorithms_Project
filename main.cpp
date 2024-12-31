@@ -9,7 +9,7 @@
 #include <QApplication>
 #include "prettify.hpp" // Include your prettifyXML function
 #include "Minifing.h"
-#include "xml2json.h"
+#include "xml2json.hpp"
 #include "compressor.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), inputFilePath("") {
@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *minifyButton = new QPushButton("Minify File", this);
     QPushButton *compressButton = new QPushButton("Compress File", this);
     QPushButton *convert2jsonButton = new QPushButton("Convert to json", this);
+    QPushButton *searchButton = new QPushButton("Search", this);
     fileLabel = new QLabel("No file selected", this);
     fileContent = new LargeFileViewer(this);
     fileContent->setReadOnly(true); // Allow editing if needed
@@ -31,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(minifyButton, &QPushButton::clicked, this, &MainWindow::minifyXML);
     connect(convert2jsonButton, &QPushButton::clicked, this, &MainWindow::XML2json);
     connect(compressButton, &QPushButton::clicked, this, &MainWindow::compressXML);
+    connect(searchButton, &QPushButton::clicked, this, &MainWindow::openSearchWindow);
     // Left layout (buttons and label)
     QVBoxLayout *buttonLayout = new QVBoxLayout();
     buttonLayout->addWidget(fileLabel);
@@ -40,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     buttonLayout->addWidget(minifyButton);
     buttonLayout->addWidget(convert2jsonButton);
     buttonLayout->addWidget(compressButton);
+    buttonLayout->addWidget(searchButton);
     buttonLayout->addStretch(1);
 
     QWidget *buttonWidget = new QWidget(this);
@@ -74,7 +77,11 @@ void MainWindow::chooseXMLFile() {
         }
     }
 }
-
+void MainWindow::openSearchWindow()
+{
+    searchWindow = new SearchWindow(this); // Create the search window
+    searchWindow->show();
+}
 void MainWindow::prettifyXML() {
     if (inputFilePath.isEmpty()) {
         QMessageBox::warning(this, "Error", "No input file selected!");

@@ -7,6 +7,9 @@
 #include <QString>
 #include <QPlainTextEdit>
 #include "largefileviewer.h"
+#include "searchwindow.h"
+#include "word_topic_search.h"
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -20,11 +23,12 @@ private slots:
     void minifyXML();
     void XML2json();
     void compressXML();
+    void openSearchWindow();
 private:
     QString inputFilePath;   // Store the selected XML file path
     QLabel *fileLabel;       // Label to display the file name
     LargeFileViewer *fileContent;  // Text edit to display the content of the file
-
+    SearchWindow *searchWindow;
 };
 
 #endif // MAINWINDOW_H

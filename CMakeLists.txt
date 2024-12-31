@@ -21,21 +21,19 @@ set(PROJECT_SOURCES
         prettify.hpp
         minify.cpp
         Minifing.h
-        xml2json.h
-        xml_editor.cpp
         compressor.h
         compressor.cpp
         largefileviewer.cpp
         largefileviewer.h
+        xml2json.cpp
+        xml2json.hpp
         searchwindow.cpp
         searchwindow.h
         searchwindow.ui
         word_topic_search.cpp
         word_topic_search.h
-
-
-
-
+        xml_helper.cpp
+        xml2json.hpp
 
 
 )
