@@ -66,7 +66,7 @@ void printS(unordered_set<int> result, int userId) {
 }
 
 string printS_string(const unordered_set<int>& result, int userId) {
-    string stringResult = ""; // To store the string type of the result
+    string stringResult = "User "+to_string(userId)+" suggestions are: \n"; // To store the string type of the result
 
     if (result.empty()) {
         stringResult = "No suggestions available.\n";
