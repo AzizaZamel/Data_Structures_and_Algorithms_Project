@@ -118,7 +118,7 @@ void compressXML(const std::string& inputFilename, const std::string& outputFile
     std::cout << "Compression completed!" << std::endl;
 }
 
-int main() {
+/*int main() {
     std::string inputXML = "sample.xml";
     std::string compressedFile = "compressed_file_test.huff";
 
@@ -127,3 +127,4 @@ int main() {
 
     return 0;
 }
+*/
