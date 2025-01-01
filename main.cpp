@@ -22,7 +22,7 @@
 
 void generateGraphImage() {
     QProcess process;
-    process.start("dot", QStringList() << "-Tpng" << "graph.dot" << "-o" << "graph.png");
+    process.start("dot", QStringList() << "-Tpng -Gdpi=1000" << "graph.dot" << "-o" << "graph.jpg");
     process.waitForFinished();
 
     // Check for errors
@@ -92,18 +92,21 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(splitter);
 }
 void MainWindow::NAXML(){
-
+    nawindow = new NetworkAnalysisWindow(this); // Create the search window
+    nawindow->set_xmlFile(inputFilePath.toStdString());
+    nawindow->show();
 }
 void MainWindow::graphXML(){
     Graph *g = generateGraph(inputFilePath.toStdString());
     g->printUsers();
     std::string dotFile = g->generateDotFile();
-    generateJpgFromDot(dotFile, "graph.jpg");
+    //generateJpgFromDot(dotFile, "graph.jpg");
+    generateGraphImage();
     // Create a new window
     // Create a new window
     QDialog *imageWindow = new QDialog(this);
     imageWindow->setWindowTitle("Generated Graph");
-    imageWindow->resize(800, 600); // Adjust the initial size as needed
+    //imageWindow->resize(800, 600); // Adjust the initial size as needed
 
     // Create a layout
     QVBoxLayout *layout = new QVBoxLayout(imageWindow);
@@ -126,7 +129,7 @@ void MainWindow::graphXML(){
 
     // Manually scale the view to make the graph more visible
     view->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
-    view->scale(2.0, 2.0); // Adjust scale factor (e.g., 2.0 to double the size)
+    view->scale(10.0,10.0); // Adjust scale factor (e.g., 2.0 to double the size)
 
     // Add the view to the layout
     layout->addWidget(view);
@@ -156,6 +159,7 @@ void MainWindow::chooseXMLFile() {
 void MainWindow::openSearchWindow()
 {
     searchWindow = new SearchWindow(this); // Create the search window
+    searchWindow->set_xmlFile(inputFilePath.toStdString());
     searchWindow->show();
 }
 void MainWindow::checkXML(){

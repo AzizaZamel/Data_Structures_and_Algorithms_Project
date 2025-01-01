@@ -40,7 +40,27 @@ set(PROJECT_SOURCES
         xml_checker.hpp
         graph.cpp
         graph.hpp
-
+        libxml_parser_lib.a
+        mutual_followers.cpp
+        mutual_followers.hpp
+        networkanalysiswindow.cpp
+        networkanalysiswindow.h
+        networkanalysiswindow.ui
+        suggest.cpp
+        suggest.hpp
+        user.hpp
+        utils.cpp
+        utils.hpp
+        xml_node.hpp
+        xml_parser.hpp
+        most_active.cpp
+        most_active.hpp
+        most_influencer.cpp
+        most_influencer.hpp
+        xml_node.cpp
+        xml_parser.cpp
+        xml_util.cpp
+        xml_util.hpp
 
 )
 
