@@ -23,7 +23,7 @@ vector<int> printWhoUserFollows(const unordered_map<int, list<int>>& m, int user
     return usersFollowed;
 }
 
-void suggest(const unordered_map<int, list<int>>& m, int userId) {
+unordered_set<int> suggest(const unordered_map<int, list<int>>& m, int userId) {
     vector<int> following;      //vector to hold users that userId follows
     vector<int> following_2;    //vector to hold the followers of the followers
     unordered_set<int> result;  //unordered set to avoid duplicates
@@ -43,6 +43,17 @@ void suggest(const unordered_map<int, list<int>>& m, int userId) {
         }
 
     }
+    return result;
+}
+
+unordered_set<int> print_suggested(const string& filename, int userId) {
+    Graph* g = generateGraph(filename);
+
+    return suggest(g->getMap(), userId);
+
+}
+
+void printS(unordered_set<int> result, int userId) {
     cout << "User " << userId << " suggestions are: " << endl;
     if (result.empty()) {
         cout << "No suggestions available.\n";
@@ -54,17 +65,32 @@ void suggest(const unordered_map<int, list<int>>& m, int userId) {
     }
 }
 
+string printS_string(const unordered_set<int>& result, int userId) {
+    string stringResult = "User "+to_string(userId)+" suggestions are: \n"; // To store the string type of the result
+
+    if (result.empty()) {
+        stringResult = "No suggestions available.\n";
+        return stringResult;
+    }
+    else {
+        for (int suggestion : result) {
+            string suggestionStr = to_string(suggestion); // Convert int to string
+            stringResult += suggestionStr + " ";           // Add to string
+        }
+    }
+    return stringResult; // Return suggested users as string
+}
+
 /*
 //usage example:
 int main(int argc, char* argv[]) {
+    unordered_set<int> result;
     string inputFile = "C:\\Users\\Acer\\Desktop\\Hana\\suggest\\suggest\\x64\\Debug\\sample.xml";
     int userId = 1;
 
-    // Generate the graph from the input XML file
-    Graph* g = generateGraph(inputFile);
-
-    suggest(g->getMap(), userId);
-
+    result = print_suggested(inputFile, userId);
+    cout << printS_string(result, userId);
+    
     return 0;
 }
 */
