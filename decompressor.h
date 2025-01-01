@@ -25,7 +25,7 @@ struct Node2 {
 };
 
 // Deserialize the Huffman Tree from a file
-Node2* deserializeTree(std::ifstream& inFile);
+Node2* deserializeTree2(std::ifstream& inFile);
 
 // Decompress the file and return the XML content
 void decompressXML(const std::string& compressedFilename, const std::string& outputFilename);

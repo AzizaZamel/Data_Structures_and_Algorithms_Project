@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
         Minifing.h
         compressor.h
         compressor.cpp
+        decompressor.h
+        decompressor.cpp
         largefileviewer.cpp
         largefileviewer.h
         xml2json.cpp

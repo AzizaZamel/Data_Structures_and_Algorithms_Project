@@ -11,7 +11,7 @@
 #include"decompressor.h"
 
 // Deserialize the Huffman Tree from a file
-Node2* deserializeTree(std::ifstream& inFile) {
+Node2* deserializeTree2(std::ifstream& inFile) {
     char type;
     inFile.get(type);
 
@@ -20,8 +20,8 @@ Node2* deserializeTree(std::ifstream& inFile) {
         inFile.get(character);
         return new Node2(character, 0);  // Leaf node
     } else {
-        Node2* left = deserializeTree(inFile);
-        Node2* right = deserializeTree(inFile);
+        Node2* left = deserializeTree2(inFile);
+        Node2* right = deserializeTree2(inFile);
         return new Node2(left, right);  // Internal node
     }
 }
@@ -31,7 +31,7 @@ void decompressXML(const std::string& compressedFilename, const std::string& out
     std::ifstream inFile(compressedFilename, std::ios::binary);
 
     // Deserialize the Huffman tree
-    Node2* root = deserializeTree(inFile);
+    Node2* root = deserializeTree2(inFile);
 
     // Read the padding size
     char padding;

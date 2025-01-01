@@ -17,6 +17,7 @@
 #include "xml_checker.hpp"
 #include "xml_helper.hpp"
 #include "graph.hpp"
+#include "decompressor.h"
 #include <QProcess>
 
 void generateGraphImage() {
@@ -42,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *checkButton = new QPushButton("Check consistency", this);
     QPushButton *graphButton = new QPushButton("Visualize", this);
     QPushButton *NAButton = new QPushButton("Network analysis", this);
+    QPushButton *decompressButton = new QPushButton("Decompress File", this);
     fileLabel = new QLabel("No file selected", this);
     fileContent = new LargeFileViewer(this);
     fileContent->setReadOnly(true); // Allow editing if needed
@@ -57,7 +59,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(checkButton, &QPushButton::clicked, this, &MainWindow::checkXML);
     connect(graphButton, &QPushButton::clicked, this, &MainWindow::graphXML);
     connect(NAButton, &QPushButton::clicked, this, &MainWindow::NAXML);
+    connect(decompressButton, &QPushButton::clicked, this, &MainWindow::decompressXML);
     // Left layout (buttons and label)
+
     QVBoxLayout *buttonLayout = new QVBoxLayout();
     buttonLayout->addWidget(fileLabel);
     buttonLayout->addWidget(chooseFileButton);
@@ -66,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     buttonLayout->addWidget(minifyButton);
     buttonLayout->addWidget(convert2jsonButton);
     buttonLayout->addWidget(compressButton);
+    buttonLayout->addWidget(decompressButton);
     buttonLayout->addWidget(searchButton);
     buttonLayout->addWidget(checkButton);
     buttonLayout->addWidget(graphButton);
@@ -253,6 +258,33 @@ void MainWindow::compressXML() {
         // Convert QString to std::string for the function call
         ::compressXML(inputFilePath.toStdString(), outputFileName.toStdString());
 
+        QMessageBox::information(this, "Success", "File formatted and saved to: " + outputFileName);
+    } catch (const std::exception &e) {
+        QMessageBox::critical(this, "Error", QString("Failed to convert the XML file: %1").arg(e.what()));
+    }
+}
+void MainWindow::decompressXML() {
+    if (inputFilePath.isEmpty()) {
+        QMessageBox::warning(this, "Error", "No input file selected!");
+        return;
+    }
+
+    QString outputFileName = QFileDialog::getSaveFileName(this, "Save Formatted XML", "", "XML Files (*.xml);;Text Files (*.txt);;All Files (*)");
+    if (outputFileName.isEmpty()) {
+        return;
+    }
+
+    try {
+        // Convert QString to std::string for the function call
+        ::decompressXML(inputFilePath.toStdString(), outputFileName.toStdString());
+        QFile file(outputFileName);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            fileContent->setPlainText(in.readAll());
+            file.close();
+        } else {
+            QMessageBox::warning(this, "Error", "Unable to open the selected file!");
+        }
         QMessageBox::information(this, "Success", "File formatted and saved to: " + outputFileName);
     } catch (const std::exception &e) {
         QMessageBox::critical(this, "Error", QString("Failed to convert the XML file: %1").arg(e.what()));

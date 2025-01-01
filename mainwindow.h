@@ -27,6 +27,7 @@ private slots:
     void checkXML();
     void graphXML();
     void NAXML();
+    void decompressXML();
 private:
     QString inputFilePath;   // Store the selected XML file path
     QLabel *fileLabel;       // Label to display the file name
