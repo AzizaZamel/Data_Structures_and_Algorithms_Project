@@ -11,14 +11,14 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class SearchWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class SearchWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    SearchWindow(QWidget *parent = nullptr);
    void set_xmlFile(string xmlFile );
-    ~MainWindow();
+    ~   SearchWindow();
 
 private slots:
     void onSearchButtonClicked(); // Slot for handling search button clicks

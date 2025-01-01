@@ -2,51 +2,17 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <algorithm>
 #include <map>
 #include <vector>
 #include <queue>
 #include <stack>
 #include <unordered_map>
+#include "xml_helper.hpp"
+#include "xml2json.hpp"
 using namespace std;
 
 //************************************************************
 //helper functions
-bool is_start(string s) {
-    if (s[0] == '<' && s[1] != '/') {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-bool is_end(string s) {
-    if (s[0] == '<' && s[1] == '/') {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-bool is_string(string s) {
-    for (int i = 1;i < s.size();i++) {
-        if (s[0] == '<' && s[i] == '>') {
-            return false;
-        }
-    }
-    return true;
-}
-
-string start_string(string s) {
-    return s.substr(1, s.size() - 2);
-}
-
-string end_string(string s) {
-    return s.substr(2, s.size() - 3);
-}
-
 bool is_arr(vector<string>v, int a, int b, string g) {
     for (int i = a;i < v.size();i++) {
         if (is_start(v[i]) && is_end(v[i - 1])) {
@@ -57,31 +23,14 @@ bool is_arr(vector<string>v, int a, int b, string g) {
     }
     return false;
 }
-
-void trimTrailingWhitespace(string& str) {
-    size_t end = str.find_last_not_of(" \t\n\r\f\v");
-    if (end != string::npos) {
-        str.erase(end + 1);
-    }
-    else {
-        str.clear();
-    }
-}
 //************************************************************
 
 void convertXmlToJson(const string& inputFile, const string& outputFile) {
     vector<string> v;
     stack<string> bracket;
     //string parent;
-    string tab = "\t";
+    string tab = "    ";
     string b;
-
-    //open xml file
-    ifstream xmlFile(inputFile);
-    if (!xmlFile.is_open()) {
-        cerr << "Error opening file: " << inputFile << endl;
-        return;
-    }
 
     //create a json file
     ofstream jsonFile(outputFile);
@@ -90,43 +39,7 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
         return;
     }
 
-    //turn xml to a string and remove any excess space
-    stringstream buffer;
-    buffer << xmlFile.rdbuf();
-    string xmlString = buffer.str();
-    xmlFile.close();
-    xmlString.erase(remove(xmlString.begin(), xmlString.end(), '\n'), xmlString.end());
-    xmlString.erase(remove(xmlString.begin(), xmlString.end(), '\t'), xmlString.end());
-
-    //cout << xmlString.length() << endl;
-    //******************************************************************//
-    //Get each tag frequency and divide words and put it in vector ;-;
-
-    for (int i = 0; i < xmlString.size(); i++) {
-        int word_size = 0;
-        if (xmlString[i] == '<') {
-            word_size++;
-            while (xmlString[i] != '>') {
-                i++;
-                word_size++;
-            }
-            v.push_back(xmlString.substr(i - word_size + 1, word_size)); // Exclude '<' and '>'
-        }
-        else if (xmlString[i] == ' ') continue;
-        else {
-        int start = i;
-        while (i < xmlString.size() && xmlString[i] != '<') {
-            i++;
-        }
-        v.push_back(xmlString.substr(start, i - start));
-        i--;  // Adjust i to stay on the correct position (before '<' for next iteration)
-        }
-    }
-    //******************************************************************//
-
-    for (int i = 0; i < v.size();i++) {
-        trimTrailingWhitespace(v[i]);
-    }
+    v = parser(inputFile);
 
     //start function from here
     //initial step
@@ -174,13 +87,13 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
 
             if (!bracket.empty()) b = bracket.top();
 
-            if ((start_string(v[i + 1]) == end_string(v[i])) && is_string(v[i-1]) && b == "[") {
+            if ((start_string(v[i + 1]) == end_string(v[i])) && is_string(v[i - 1]) && b == "[") {
 
             }
             else if (is_start(v[i + 1]) && (start_string(v[i + 1]) != end_string(v[i])) && is_string(v[i - 1])) {
 
             }
-            else if ( is_string(v[i - 1]) && b != "[") {
+            else if (is_string(v[i - 1]) && b != "[") {
 
             }
             else {
@@ -212,7 +125,7 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
         }
         else {
             bool already_exists = false;
-            if (start_string(v[i-1]) == end_string(v[i - 2])) already_exists = true;
+            if (start_string(v[i - 1]) == end_string(v[i - 2])) already_exists = true;
             bool flag = is_arr(v, i, size, v[i - 1]);   // 1 = array, 0 = not an array
             if (flag && !already_exists) {
                 jsonFile << "[\n";
@@ -226,7 +139,7 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
             else {
                 jsonFile << "\"" + v[i] + "\"";
             }
-            
+
         }
     }
 
@@ -235,12 +148,12 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
         if (b == "[") {
             if (!tab.empty()) tab.pop_back();
             jsonFile << "\n" + tab + "]";
-            
+
         }
         else if (b == "{") {
             if (!tab.empty()) tab.pop_back();
             jsonFile << "\n" + tab + "}";
-            
+
         }
         bracket.pop();
     }
@@ -248,5 +161,3 @@ void convertXmlToJson(const string& inputFile, const string& outputFile) {
     jsonFile << endl;
     cerr << "Conversion from XML to JSON completed!" << endl;
 }
-
-
