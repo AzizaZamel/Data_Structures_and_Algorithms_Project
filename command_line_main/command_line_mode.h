@@ -17,4 +17,6 @@
  void fix_XML_File(const std::string &input_file, const std::string &output_file);
 
  void checkConsistency_Xml_file(const std::string &input_file);
+
+ void generate_graph(const string& filename,const string& output_file);
 #endif /* COMMAND_LINE_MODE_H_ */
