@@ -49,33 +49,8 @@ using namespace std;
 	}
 	return 0;
 
-}*/
-// Function to read the contents of a file and return it as a string.
-string convert_file_to_string(const string &filename) {
-	ifstream file(filename); // Open the file
-	if (!file.is_open()) {   // Check if the file is successfully opened
-		fprintf(stderr, "can't open file"); // Print error if file can't be opened
-	}
-
-	stringstream buffer;  // Create a stringstream to hold the file contents
-	buffer << file.rdbuf(); // Read the entire file into the buffer
-	file.close();  // Close the file after reading
-	return buffer.str();  // Return the contents of the file as a string
 }
-void write_string_into_file(const string &output_filename, string output) {
-
-	ofstream outFile(output_filename); // Open the output file to write the minified content
-
-	// Check if the output file is open
-	if (outFile.is_open()) {
-		// Write the minified content to the output file
-		outFile << output;
-	} else {
-		fprintf(stderr, "can't open file"); // Print error if file can't be opened
-	}
-}
-/* Function to minify the XML content by removing unnecessary whitespace,
- ,comments, and declarations*/
+*/
 void minify_string(string str, string &output) {
 	//cout << str << "\n"; // Output the original content for debugging or observation
 	//string output;  // String to store the minified result
@@ -140,7 +115,7 @@ void minify_string(string str, string &output) {
 			 * or consecutive spaces inside text that
 			 * or a space before the next opening tag '<'
 			 */
-			if(spaces_after_closing_tag){
+			if(spaces_after_closing_tag||str[i]=='\t'||str[i]=='\r'){
 				continue;
 			}
 
@@ -199,13 +174,13 @@ string minify_xml_file(const string &input_filename,
 	string output;
 
 	// Get the content of the input file as a string
-	string str = convert_file_to_string(input_filename);
+	string str = fileToString(input_filename);
 
 	// Minify the XML content by removing unnecessary whitespace and comments
 	minify_string(str, output);
 
 	// Write the minified content into the output file
-	write_string_into_file(output_filename, output);
+	stringToFile( output,output_filename);
 
 	// Return the minified content as a string
 	return output;
