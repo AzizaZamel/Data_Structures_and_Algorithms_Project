@@ -30,7 +30,7 @@ $(BUILD_DIR)/%.o: src/%.cpp
 
 # Clean build artifacts
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(TARGET) $(BIN_DIR)
 	rm -rf $(BUILD_DIR)
 	@echo "----------------------------------"
 	@echo ">>> Cleaned build artifacts. <<<"
