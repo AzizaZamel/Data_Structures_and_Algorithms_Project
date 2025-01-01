@@ -173,3 +173,9 @@ void checkConsistency_Xml_file(const std::string &input_file) {
 	XmlChecker checker;  // Create an XmlChecker object
 	checker.checkConsistency(xmlContent);  // Check XML consistency
 }
+void generate_graph(const string& filename,const string& output_file){
+Graph* g = generateGraph(filename);
+string dotFile = g->generateDotFile();
+generateJpgFromDot(dotFile,output_file);
+
+}
