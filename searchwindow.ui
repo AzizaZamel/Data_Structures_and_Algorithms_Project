@@ -59,6 +59,9 @@
       <height>301</height>
      </rect>
     </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::ContextMenuPolicy::ActionsContextMenu</enum>
+    </property>
     <property name="sizeAdjustPolicy">
      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
     </property>

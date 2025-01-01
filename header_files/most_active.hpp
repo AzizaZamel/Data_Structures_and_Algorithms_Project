@@ -10,7 +10,10 @@
 #include "graph.hpp"  
 
 using namespace std;
-// Function to find the most active user based on in-degree and out-degree
+
+//helper function for main function 
+string helper_function(const string& xmlfile);
+// Main Function to find the most active user based on in-degree and out-degre
 string most_active_user(Graph* g);
 
 #endif 
