@@ -52,100 +52,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    xml_parser_lib::xml_parser parser;
-    std::shared_ptr<xml_parser_lib::xml_node> root_node;
-    try
-    {
-        root_node = parser.parse_from_file(filename);
-    }
-    catch (const std::exception &ex)
-    {
-        log_error("Failed to parse XML: " + std::string(ex.what()));
-        return 1;
-    }
+    // Get mutual followers as a string
+    std::string result = get_mutual_followers_string(user_ids, filename);
 
-    if (root_node->get_name() != "users")
-    {
-        log_error("Root element is not <users>.");
-        return 1;
-    }
-
-    std::map<int, User> user_map;
-    for (const auto &user_node : root_node->get_children())
-    {
-        if (user_node->get_name() != "user")
-            continue;
-
-        // Extract <id>
-        std::string id_text = get_child_text(user_node, "id");
-        if (id_text.empty())
-        {
-            log_error("Missing <id> in <user>.");
-            continue;
-        }
-
-        int uid;
-        try
-        {
-            uid = std::stoi(id_text);
-        }
-        catch (const std::exception &)
-        {
-            log_error("Invalid <id> value in <user>.");
-            continue;
-        }
-
-        // Extract <name>
-        std::string uname = get_child_text(user_node, "name");
-        if (uname.empty())
-        {
-            log_error("Missing <name> in <user>.");
-            continue;
-        }
-
-        User u{uid, uname, {}};
-
-        // Extract followers
-        auto followers_node = find_child_by_name(user_node, "followers");
-        if (followers_node)
-        {
-            for (const auto &follower_node : followers_node->get_children())
-            {
-                if (follower_node->get_name() == "follower")
-                {
-                    std::string fid_text = get_child_text(follower_node, "id");
-                    if (!fid_text.empty())
-                    {
-                        try
-                        {
-                            int fid = std::stoi(fid_text);
-                            u.followers.push_back(fid);
-                        }
-                        catch (const std::exception &)
-                        {
-                            log_error("Invalid follower <id> in <follower>.");
-                        }
-                    }
-                    else
-                    {
-                        log_error("Missing <id> in <follower>.");
-                    }
-                }
-            }
-        }
-
-        user_map[u.id] = u;
-    }
-
-    try
-    {
-        auto mutual_followers = find_mutual_followers(user_map, user_ids);
-        display_mutual_followers(user_ids, mutual_followers, user_map);
-    }
-    catch (const std::exception &ex)
-    {
-        log_error("Error finding mutual followers: " + std::string(ex.what()));
-    }
+    // Display the result
+    std::cout << result;
 
     return 0;
 }
