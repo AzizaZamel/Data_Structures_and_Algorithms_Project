@@ -10,12 +10,12 @@
 #include "most_active.hpp" 
 using namespace std;
 
-void helper_function(const string& xmlfile) {
+string helper_function(const string& xmlfile) {
     string inputfilename = xmlfile ;
     // Function to generate a graph from an XML file.
     Graph* v = generateGraph(inputfilename);
     //Call main function.
-    most_active_user(v);
+    return  most_active_user(v) ;
 }
 
 
