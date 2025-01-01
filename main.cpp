@@ -92,7 +92,9 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(splitter);
 }
 void MainWindow::NAXML(){
-
+    nawindow = new NetworkAnalysisWindow(this); // Create the search window
+    nawindow->set_xmlFile(inputFilePath.toStdString());
+    nawindow->show();
 }
 void MainWindow::graphXML(){
     Graph *g = generateGraph(inputFilePath.toStdString());
@@ -156,6 +158,7 @@ void MainWindow::chooseXMLFile() {
 void MainWindow::openSearchWindow()
 {
     searchWindow = new SearchWindow(this); // Create the search window
+    searchWindow->set_xmlFile(inputFilePath.toStdString());
     searchWindow->show();
 }
 void MainWindow::checkXML(){
