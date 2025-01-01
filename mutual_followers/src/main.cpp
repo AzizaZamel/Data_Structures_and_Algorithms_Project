@@ -2,8 +2,9 @@
 #include <memory>
 #include <map>
 #include <set>
-#include "mutual_followers.hpp"
 #include "xml_parser.hpp"
+#include "xml_node.hpp"
+#include "mutual_followers.hpp"
 #include "user.hpp"
 #include "utils.hpp"
 
@@ -11,7 +12,7 @@ int main(int argc, char *argv[])
 {
     if (argc < 6)
     {
-        std::cerr << "Usage: " << argv[0] << " mutual -i <network_xml> -ids 1,2,3" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " mutual -i <users_xml> -ids 1,2,3" << std::endl;
         return 1;
     }
 
@@ -63,46 +64,76 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (root_node->get_name() != "network")
+    if (root_node->get_name() != "users")
     {
-        log_error("Root element is not <network>.");
+        log_error("Root element is not <users>.");
         return 1;
     }
 
     std::map<int, User> user_map;
-    for (auto &user_node : root_node->get_children())
+    for (const auto &user_node : root_node->get_children())
     {
         if (user_node->get_name() != "user")
             continue;
 
-        auto attrs = user_node->get_attributes();
-        if (attrs.find("id") == attrs.end() || attrs.find("name") == attrs.end())
+        // Extract <id>
+        std::string id_text = get_child_text(user_node, "id");
+        if (id_text.empty())
         {
-            log_error("Missing 'id' or 'name' in <user>.");
+            log_error("Missing <id> in <user>.");
             continue;
         }
 
-        int uid = std::stoi(attrs.at("id"));
-        std::string uname = attrs.at("name");
+        int uid;
+        try
+        {
+            uid = std::stoi(id_text);
+        }
+        catch (const std::exception &)
+        {
+            log_error("Invalid <id> value in <user>.");
+            continue;
+        }
+
+        // Extract <name>
+        std::string uname = get_child_text(user_node, "name");
+        if (uname.empty())
+        {
+            log_error("Missing <name> in <user>.");
+            continue;
+        }
+
         User u{uid, uname, {}};
 
-        for (auto &child : user_node->get_children())
+        // Extract followers
+        auto followers_node = find_child_by_name(user_node, "followers");
+        if (followers_node)
         {
-            if (child->get_name() == "followers")
+            for (const auto &follower_node : followers_node->get_children())
             {
-                for (auto &f : child->get_children())
+                if (follower_node->get_name() == "follower")
                 {
-                    if (f->get_name() == "follower")
+                    std::string fid_text = get_child_text(follower_node, "id");
+                    if (!fid_text.empty())
                     {
-                        auto fattrs = f->get_attributes();
-                        if (fattrs.find("id") != fattrs.end())
+                        try
                         {
-                            u.followers.push_back(std::stoi(fattrs.at("id")));
+                            int fid = std::stoi(fid_text);
+                            u.followers.push_back(fid);
                         }
+                        catch (const std::exception &)
+                        {
+                            log_error("Invalid follower <id> in <follower>.");
+                        }
+                    }
+                    else
+                    {
+                        log_error("Missing <id> in <follower>.");
                     }
                 }
             }
         }
+
         user_map[u.id] = u;
     }
 

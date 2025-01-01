@@ -1,9 +1,8 @@
-// utils.cpp
 #include "utils.hpp"
 #include <iostream>
 #include <sstream>
-#include <vector>
 
+// Existing utility function implementations
 std::vector<int> parse_ids(const std::string &ids_str)
 {
     std::vector<int> user_ids;
@@ -13,7 +12,18 @@ std::vector<int> parse_ids(const std::string &ids_str)
     {
         if (!item.empty())
         {
-            user_ids.push_back(std::stoi(item));
+            try
+            {
+                user_ids.push_back(std::stoi(item));
+            }
+            catch (const std::invalid_argument &)
+            {
+                log_error("Invalid ID encountered: " + item);
+            }
+            catch (const std::out_of_range &)
+            {
+                log_error("ID out of range: " + item);
+            }
         }
     }
     return user_ids;
@@ -53,4 +63,31 @@ void log_error(const std::string &message)
 void log_info(const std::string &message)
 {
     std::cout << "[INFO]: " << message << "\n";
+}
+
+// New helper function implementations
+std::shared_ptr<xml_parser_lib::xml_node> find_child_by_name(
+    const std::shared_ptr<xml_parser_lib::xml_node> &node,
+    const std::string &child_name)
+{
+    for (const auto &child : node->get_children())
+    {
+        if (child->get_name() == child_name)
+        {
+            return child;
+        }
+    }
+    return nullptr;
+}
+
+std::string get_child_text(
+    const std::shared_ptr<xml_parser_lib::xml_node> &node,
+    const std::string &child_name)
+{
+    auto child = find_child_by_name(node, child_name);
+    if (child)
+    {
+        return child->get_text();
+    }
+    return "";
 }
