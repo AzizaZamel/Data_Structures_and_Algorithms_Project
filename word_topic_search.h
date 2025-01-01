@@ -16,7 +16,7 @@
 #include <string>    // Include string library for string handling
 #include <vector>    // Include vector library for dynamic array handling
 #include <regex>     // Include regex library for regular expression handling
-#include "xml_helper.h"  // Include external header for XML helper functions
+#include "xml_helper.hpp"  // Include external header for XML helper functions
 
 using namespace std;
 

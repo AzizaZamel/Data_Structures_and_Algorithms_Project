@@ -48,7 +48,7 @@ string end_string(string s) {       //removes end tag's "</>"
 string fileToString(const string& filename) {
     // Open the file
     ifstream file(filename);
-    // Check if the file is successfully opened
+
     if (!file.is_open()) {
         // If the file couldn't be opened, throw an exception with an error message
         throw std::runtime_error("Can't open file: " + filename);

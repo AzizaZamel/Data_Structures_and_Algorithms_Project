@@ -2,9 +2,9 @@
 #include "ui_searchwindow.h"
 
 // Constructor for MainWindow, sets up the UI and initializes components
-MainWindow::MainWindow(QWidget *parent)
+SearchWindow::SearchWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::SearchWindow)
 {
     ui->setupUi(this);
 
@@ -12,22 +12,22 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox->addItems({"Word", "Topic"});
 
     // Connect the search button's click signal to the onSearchButtonClicked slot
-    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::onSearchButtonClicked);
+    connect(ui->pushButton, &QPushButton::clicked, this, &SearchWindow::onSearchButtonClicked);
 }
 
 // Destructor for MainWindow, ensures proper cleanup of the UI
-MainWindow::~MainWindow()
+SearchWindow::~SearchWindow()
 {
     delete ui;
 }
 
 // Setter function to assign the XML file name or path
-void MainWindow::set_xmlFile(string File ){
+void SearchWindow::set_xmlFile(string File ){
     xmlFile = File; // Assign the provided file name to the class variable
 }
 
 // Slot function called when the search button is clicked
-void MainWindow::onSearchButtonClicked()
+void SearchWindow::onSearchButtonClicked()
 {
     // Retrieve the selected search type from the ComboBox
     QString searchType = ui->comboBox->currentText();
