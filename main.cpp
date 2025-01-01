@@ -100,8 +100,8 @@ void MainWindow::graphXML(){
     Graph *g = generateGraph(inputFilePath.toStdString());
     g->printUsers();
     std::string dotFile = g->generateDotFile();
-    //generateJpgFromDot(dotFile, "graph.jpg");
-    generateGraphImage();
+
+    //generateGraphImage();
     // Create a new window
     // Create a new window
     QDialog *imageWindow = new QDialog(this);
@@ -114,9 +114,13 @@ void MainWindow::graphXML(){
     // Create a QGraphicsView to display the image
     QGraphicsView *view = new QGraphicsView(imageWindow);
     QGraphicsScene *scene = new QGraphicsScene(view);
-
+    QString outputFileName = QFileDialog::getSaveFileName(this, "Save Formatted XML", "", "JPG Files (*.jpg)");
+    if (outputFileName.isEmpty()) {
+        return;
+    }
+    generateJpgFromDot(dotFile, outputFileName.toStdString());
     // Load the image
-    QPixmap pixmap("graph.jpg");
+    QPixmap pixmap(outputFileName);
     if (pixmap.isNull())
     {
         QMessageBox::critical(this, "Error", "Failed to load the generated image.");
