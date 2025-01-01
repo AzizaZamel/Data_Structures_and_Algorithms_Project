@@ -8,33 +8,21 @@
 
 
 // Define the Huffman Node structure
-struct Node {
-    char character;
-    int frequency;
-    Node* left;
-    Node* right;
-
-    Node(char c, int freq) : character(c), frequency(freq), left(nullptr), right(nullptr) {}
-    Node(Node* left, Node* right) : character(0), frequency(left->frequency + right->frequency), left(left), right(right) {}
-
-    bool operator>(const Node& other) const {
-        return frequency > other.frequency;
-    }
-};
+#include"decompressor.h"
 
 // Deserialize the Huffman Tree from a file
-Node* deserializeTree(std::ifstream& inFile) {
+Node2* deserializeTree(std::ifstream& inFile) {
     char type;
     inFile.get(type);
 
     if (type == '1') {
         char character;
         inFile.get(character);
-        return new Node(character, 0);  // Leaf node
+        return new Node2(character, 0);  // Leaf node
     } else {
-        Node* left = deserializeTree(inFile);
-        Node* right = deserializeTree(inFile);
-        return new Node(left, right);  // Internal node
+        Node2* left = deserializeTree(inFile);
+        Node2* right = deserializeTree(inFile);
+        return new Node2(left, right);  // Internal node
     }
 }
 
@@ -43,7 +31,7 @@ void decompressXML(const std::string& compressedFilename, const std::string& out
     std::ifstream inFile(compressedFilename, std::ios::binary);
 
     // Deserialize the Huffman tree
-    Node* root = deserializeTree(inFile);
+    Node2* root = deserializeTree(inFile);
 
     // Read the padding size
     char padding;
@@ -62,7 +50,7 @@ void decompressXML(const std::string& compressedFilename, const std::string& out
 
     // Decode the bitstream using the Huffman tree
     std::string decodedText;
-    Node* current = root;
+    Node2* current = root;
     for (char bit : bitstream) {
         if (bit == '0') {
             current = current->left;
@@ -86,7 +74,9 @@ void decompressXML(const std::string& compressedFilename, const std::string& out
 }
 
 // Example Usage
-int main() {
+
+
+/*int main() {
     std::string compressedFile = "compressed_file_test.huff";
     std::string outputXML = "output.xml";
 
@@ -94,4 +84,4 @@ int main() {
     decompressXML(compressedFile, outputXML);
 
     return 0;
-}
+}*/
