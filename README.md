@@ -1,4 +1,4 @@
-**Running the GUI**
+رب**Running the GUI**
 1. Download the GUI Files:
 
 2. Navigate to the `GUI executable` directory in the repository.
@@ -16,6 +16,6 @@
 4. Rodina `@rodMo7A` & `@wiserODec`
 5. Hana `@Hana-Shamel`
 6. Sarah `@Sarah-Tarek`
-
+7. Toqa `@Toqa-Gamal`
 **Demos**
 https://drive.google.com/drive/folders/1mgch70B48prUBBlIBkjY4yaJvPKB5xBT
